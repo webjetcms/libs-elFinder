@@ -49,8 +49,9 @@ elFinder.prototype.commands.upload = function() {
 				return tgts;
 			},
 			targets = getTargets(),
-			check = targets? targets[0] : (data && data.target? data.target : null),
-			targetDir = check? fm.file(check) : fm.cwd(),
+			check = targets? targets[0] : (data && data.target? data.target : null);
+			
+			var targetDir = check? fm.file(check) : fm.cwd(),
 			fmUpload = function(data) {
 				fm.upload(data)
 					.fail(function(error) {
@@ -416,6 +417,17 @@ elFinder.prototype.commands.upload = function() {
 				}
 			}
 		});
+
+		input.click();
+		
+		/* LPA - #20705 - #15
+		uidialog = fm.dialog(dialog, {
+			title          : this.title + '<span class="elfinder-upload-target">' + (targetDir? ' - ' + fm.escape(targetDir.i18 || targetDir.name) : '') + '</span>',
+			modal          : true,
+			resizable      : false,
+			destroyOnClose : true
+		});
+		*/
 		
 		return dfrd;
 	};

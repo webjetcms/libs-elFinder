@@ -6190,7 +6190,37 @@ elFinder.prototype = {
 						return;
 					}
 					
-					names = $.map(files, function(file, i) { return file.name && (!fm.UA.iOS || file.name !== 'image.jpg')? {i: i, name: file.name} : null ;});
+					var virtualPath = fm.cwd().virtualPath;
+					var useInternationalToEnglish = virtualPath.indexOf("/files") == 0 || virtualPath.indexOf("/images") == 0;
+
+					//console.log(useInternationalToEnglish);
+
+					names = $.map(files, function(file, i)
+					{
+						//console.log("Checking file.name="+file.name+" useInternationalToEnglish="+useInternationalToEnglish);
+						//console.log(file);
+                        //console.log(WJ.fixFileName(file.name));
+
+                        var name = file.name;
+
+                        if (useInternationalToEnglish) {
+                            name = WJ.fixFileName(name);
+                            name = WJ.removeSpojky(name);
+						}
+
+						if (file.name) {
+							var obj = {
+								i: i,
+								name: name
+							}
+							//console.log(obj);
+							return obj;
+						}
+						return null;
+					});
+					// name = $.map(names, function(item) {
+					// 	return useInternationalToEnglish ? WJ.fixFileName(item.name) : item.name;
+					// });
 					
 					fm.request({
 						data : {cmd : 'ls', target : target, intersect : $.map(names, function(item) { return item.name;})},
