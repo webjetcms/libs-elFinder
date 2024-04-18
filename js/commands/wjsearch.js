@@ -4,10 +4,10 @@
  *
  * @author Dmitry (dio) Levashov
  **/
-elFinder.prototype.commands.search = function() {
+elFinder.prototype.commands.wjsearch = function() {
 	"use strict";
 	this.title          = 'Find files';
-	this.options        = {ui : 'searchbutton'};
+	this.options        = {ui : 'wjsearchbutton'};
 	this.alwaysEnabled  = true;
 	this.updateOnSelect = false;
 	
@@ -18,8 +18,23 @@ elFinder.prototype.commands.search = function() {
 	 * @return Number
 	 **/
 	this.getstate = function() {
-		return 0;
-	};
+		var fm = this.fm,
+			root = fm.root(),
+			file = fm.file(root),
+			el = $('#finder .elfinder-button-search');
+
+		if (typeof file != 'undefined' && file.mime == 'directory' && file.url.startsWith('/files/archiv')) {
+			// V toolbare mi nefunguje skryvanie cez getstate == -1 tak to skryvam cez jQuery
+			if (file.url == '/files/archiv') {
+				el.show();
+			} else {
+				el.hide();
+				return 0;
+			}
+		}
+
+		return -1;
+	}
 	
 	/**
 	 * Send search request to backend.
@@ -27,7 +42,7 @@ elFinder.prototype.commands.search = function() {
 	 * @param  String  search string
 	 * @return $.Deferred
 	 **/
-	this.exec = function(q, target, mime, type) {
+	this.exec = function(q, target, mime, type, recursive=false) {
 		var fm = this.fm,
 			reqDef = [],
 			sType = type || '',
@@ -68,7 +83,7 @@ elFinder.prototype.commands.search = function() {
 					rootCnt = Object.keys(fm.roots).length;
 					$.each(fm.roots, function(id, hash) {
 						reqDef.push(fm.request({
-							data   : setType({cmd : 'search', q : q, target : hash, mimes : mime}),
+							data   : setType({cmd : 'search', q : q, target : hash, mimes : mime, recursive: recursive}),
 							notify : {type : 'search', cnt : 1, hideCnt : (rootCnt > 1? false : true)},
 							cancel : true,
 							preventDone : true
@@ -76,7 +91,7 @@ elFinder.prototype.commands.search = function() {
 					});
 				} else {
 					reqDef.push(fm.request({
-						data   : setType({cmd : 'search', q : q, target : target, mimes : mime}),
+						data   : setType({cmd : 'search', q : q, target : target, mimes : mime, recursive: recursive}),
 						notify : {type : 'search', cnt : 1, hideCnt : true},
 						cancel : true,
 						preventDone : true
@@ -90,7 +105,7 @@ elFinder.prototype.commands.search = function() {
 										var f = fm.file(this);
 										f && f.volumeid && targetVolids.push(f.volumeid);
 										reqDef.push(fm.request({
-											data   : setType({cmd : 'search', q : q, target : this, mimes : mime}),
+											data   : setType({cmd : 'search', q : q, target : this, mimes : mime, recursive: recursive}),
 											notify : {type : 'search', cnt : 1, hideCnt : false},
 											cancel : true,
 											preventDone : true

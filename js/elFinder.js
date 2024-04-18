@@ -6193,14 +6193,8 @@ elFinder.prototype = {
 					var virtualPath = fm.cwd().virtualPath;
 					var useInternationalToEnglish = virtualPath.indexOf("/files") == 0 || virtualPath.indexOf("/images") == 0;
 
-					//console.log(useInternationalToEnglish);
-
 					names = $.map(files, function(file, i)
 					{
-						//console.log("Checking file.name="+file.name+" useInternationalToEnglish="+useInternationalToEnglish);
-						//console.log(file);
-                        //console.log(WJ.fixFileName(file.name));
-
                         var name = file.name;
 
                         if (useInternationalToEnglish) {

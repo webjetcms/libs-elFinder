@@ -3,7 +3,7 @@
  *
  * @author Dmitry (dio) Levashov
  **/
-$.fn.elfindersearchbutton = function(cmd) {
+$.fn.elfinderwjsearchbutton = function(cmd) {
 	"use strict";
 	return this.each(function() {
 		var result = false,
@@ -49,9 +49,11 @@ $.fn.elfindersearchbutton = function(cmd) {
 				if (typeSet) {
 					type = typeSet.children('input:checked').val();
 				}
+				var recursive=false;
+				if ($('#' + id('SearchFromCwdRecursive')).prop('checked')) recursive = true;
 				if (val) {
 					input.trigger('focus');
-					cmd.exec(val, from, mime, type).done(function() {
+					cmd.exec(val, from, mime, type, recursive).done(function() {
 						result = true;
 					}).fail(function() {
 						abort();
@@ -224,12 +226,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 						$('<div class="buttonset"></div>')
 							.append(
 								$('<input id="'+id('SearchFromCwd')+'" name="serchfrom" type="radio" checked="checked"/><label for="'+id('SearchFromCwd')+'">'+fm.i18n('btnCwd')+'</label>'),
-								$('<input id="'+id('SearchFromVol')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromVol')+'">'+fm.i18n('btnVolume')+'</label>'),
-								$('<input id="'+id('SearchFromAll')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromAll')+'">'+fm.i18n('btnAll')+'</label>')
-							),
-						$('<div class="buttonset elfinder-search-type"></div>')
-							.append(
-								$('<input id="'+id('SearchName')+'" name="serchcol" type="radio" checked="checked" value="SearchName"/><label for="'+id('SearchName')+'">'+fm.i18n('btnFileName')+'</label>')
+								$('<input id="'+id('SearchFromCwdRecursive')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromCwdRecursive')+'">'+fm.i18n('wjSearchRecursive')+'</label>'),
 							)
 					)
 					.hide()
@@ -302,6 +299,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 					input.trigger('select').trigger('focus');
 				}
 			})
+			//TODO - do we want this ? 
 			.shortcut({
 				pattern     : 'a b c d e f g h i j k l m n o p q r s t u v w x y z dig0 dig1 dig2 dig3 dig4 dig5 dig6 dig7 dig8 dig9 num0 num1 num2 num3 num4 num5 num6 num7 num8 num9',
 				description : fm.i18n('firstLetterSearch'),
