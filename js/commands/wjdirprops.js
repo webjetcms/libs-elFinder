@@ -32,17 +32,18 @@ elFinder.prototype.commands.wjdirprops = function() {
 			return dfrd.reject("File not found.");
 		}
 
-		var modal = $('#elfinder-modal');
-		modal.find('#modalLabel').text(this.title);
-		modal.find('.modal-body').html('<iframe id="elfinderIframe" src="/admin/fbrowser/dirprop/?dir=' + fileVirtualPath + '" class="iframe" />');
-		modal.find('.action').show();
-
-		if (typeof modal.modal == 'function') {
-			modal.modal('show');
-		}
-		else {
-			modal.modal({});
-		}
+		WJ.openIframeModal({
+			url: '/admin/v9/files/folder_prop?id=-1&dirPath=' + fileVirtualPath + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
+			width: 850,
+			height: 500,
+			buttonTitleKey: "button.save",
+			closeButtonPosition: "close-button-over",
+			closeAfterSave: false,
+			okclick: function() {
+				var iframe = $("#modalIframeIframeElement");
+				$("#datatableInit_modal > div > div > div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn.btn-primary", iframe.contents()).trigger("click");
+			}
+		});
 
 		return dfrd.resolve();
 	}

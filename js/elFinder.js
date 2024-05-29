@@ -1761,7 +1761,17 @@ var elFinder = function(elm, opts, bootCallback) {
 		if (self.hasVolOptions && cwd !== target && (!(item = self.file(target)) || item.phash !== cwd)) {
 			res = '';
 			$.each(self.volOptions, function(id, opt) {
-				if (target.indexOf(id) === 0) {
+				//TODO - I think because of metadata target is OBEJCT, so I need to check if it is object or string
+				let phash = "";
+				if(typeof target === "string") {
+					phash = target;
+				} else if(typeof target === "object") { 
+					phash = target.phash;
+				} else {
+					phash = target;
+				}
+				
+				if (phash.indexOf(id) === 0) {
 					res = opt[name] || '';
 					return false;
 				}
@@ -9887,6 +9897,7 @@ elFinder.prototype = {
 				link.type = 'text/css';
 				link.rel = 'stylesheet';
 				link.href = url;
+
 				if (clName) {
 					link.className = clName;
 				}
@@ -10279,6 +10290,7 @@ elFinder.prototype = {
 				if (!themeObj.name) {
 					themeObj.name = themeid;
 				}
+
 				dfd.resolve(themeObj);
 			} else {
 				dfd.reject();

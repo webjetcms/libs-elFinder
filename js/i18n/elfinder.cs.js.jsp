@@ -479,7 +479,9 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 
             /************* WEBJET ******************/
             'cmdresize'    : 'Editovat',
-			'wjSearchRecursive': 'V podadresářích'
+			'wjSearchRecursive': 'V podadresářích',
+			'cmdwjeditswitch': 'Upravit',
+			'cmdwjfilearchive': 'Archivace souborů'
 		}
 	};
 }

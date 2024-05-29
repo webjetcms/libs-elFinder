@@ -20,8 +20,6 @@ elFinder.prototype.commands.wjfileprops = function() {
 	this.exec = function(hashes) {
 		var dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); });
 
-		//return dfrd.reject("KOKOS");
-
 		if(hashes === null || hashes === undefined || hashes.length < 1) { 
 			return dfrd.reject("Hashes are not valid.");
 		}
@@ -37,17 +35,18 @@ elFinder.prototype.commands.wjfileprops = function() {
 		var dir = fileVirtualPath.substring(0, fileVirtualPath.lastIndexOf('/') + 1);
 		var file = fileVirtualPath.substring(fileVirtualPath.lastIndexOf('/') + 1);
 
-		var modal = $('#elfinder-modal');
-		modal.find('#modalLabel').text(this.title);
-		modal.find('.modal-body').html('<iframe id="elfinderIframe" src="/admin/fbrowser/fileprop/?prop=yes&dir=' + dir + '&file=' + file + '" class="iframe" />');
-		modal.find('.action').show();
-
-		if (typeof modal.modal == 'function') {
-			modal.modal('show');
-		}
-		else {
-			modal.modal({});
-		}
+		WJ.openIframeModal({
+			url: '/admin/v9/files/file_prop?id=-1&dirPath=' + dir + "&fileName=" + file + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
+			width: 850,
+			height: 500,
+			buttonTitleKey: "button.save",
+			closeButtonPosition: "close-button-over",
+			closeAfterSave: false,
+			okclick: function() {
+				var iframe = $("#modalIframeIframeElement");
+				$("#datatableInit_modal > div > div > div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn.btn-primary", iframe.contents()).trigger("click");
+			}
+		});
 
 		return dfrd.resolve();
 	}
