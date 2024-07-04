@@ -6,6 +6,8 @@
  * By file type, switch between wjedit and wjresize. 
  * 
  * Purpose is to remove redundant icons.
+ * 
+ * @author Sebastian Ivan
  */
 elFinder.prototype.commands.wjeditswitch = function() {
 	
@@ -31,7 +33,32 @@ elFinder.prototype.commands.wjeditswitch = function() {
         }
 
         if(files[0].mime.indexOf('image/') === 0) {
-            console.log("CALL wjresize");
+            //If image is from /gallery open in new tab galleryDatatable with filtered image and open editor
+            let imageUrl = files[0].url;
+            if(imageUrl != null && imageUrl.length > 0) {
+                let imageUrlArr = imageUrl.split('/');
+
+                //check if it's from gallery
+                let isGalleryImg = false;
+                imageUrlArr.forEach((imgUrl) => {
+                    if(imgUrl === 'gallery') {
+                        isGalleryImg = true;
+
+                        let dirPath = "";
+                        for(let i = 0; i < imageUrlArr.length - 1; i++) {
+                            dirPath += imageUrlArr[i] + '/';
+                        }
+
+                        let imageName = imageUrlArr[imageUrlArr.length - 1];
+                        if(imageName.startsWith("s_")) imageName = imageName.substring(2);
+                        else if(imageName.startsWith("o_")) imageName = imageName.substring(2);
+                        window.open("/admin/v9/apps/gallery/?dir=" + dirPath + "#dt-open-editor=true&dt-filter-imageName=" + imageName);
+
+                        return dfrd;
+                    }
+                });
+            }
+
             $('#finder').elfinder('instance').exec('resize', files[0].hash); //Its wjresize BUT it's registre as resize
         } else {
             $('#finder').elfinder('instance').exec('wjedit', files[0].hash);

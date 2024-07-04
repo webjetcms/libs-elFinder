@@ -20,7 +20,7 @@ elFinder.prototype.commands.wjdirprops = function() {
 	this.exec = function(hashes) {
 		var dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); });
 
-		if(hashes === null || hashes === undefined || hashes.length < 1) { 
+		if(hashes === null || hashes === undefined || hashes.length < 1) {
 			return dfrd.reject("Hashes are not valid.");
 		}
 
@@ -32,17 +32,11 @@ elFinder.prototype.commands.wjdirprops = function() {
 			return dfrd.reject("File not found.");
 		}
 
-		WJ.openIframeModal({
+		WJ.openIframeModalDatatable({
 			url: '/admin/v9/files/folder_prop?id=-1&dirPath=' + fileVirtualPath + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
 			width: 850,
 			height: 500,
-			buttonTitleKey: "button.save",
-			closeButtonPosition: "close-button-over",
-			closeAfterSave: false,
-			okclick: function() {
-				var iframe = $("#modalIframeIframeElement");
-				$("#datatableInit_modal > div > div > div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn.btn-primary", iframe.contents()).trigger("click");
-			}
+			buttonTitleKey: "button.save"
 		});
 
 		return dfrd.resolve();

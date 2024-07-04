@@ -20,7 +20,7 @@ elFinder.prototype.commands.wjfileprops = function() {
 	this.exec = function(hashes) {
 		var dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); });
 
-		if(hashes === null || hashes === undefined || hashes.length < 1) { 
+		if(hashes === null || hashes === undefined || hashes.length < 1) {
 			return dfrd.reject("Hashes are not valid.");
 		}
 
@@ -35,17 +35,11 @@ elFinder.prototype.commands.wjfileprops = function() {
 		var dir = fileVirtualPath.substring(0, fileVirtualPath.lastIndexOf('/') + 1);
 		var file = fileVirtualPath.substring(fileVirtualPath.lastIndexOf('/') + 1);
 
-		WJ.openIframeModal({
+		WJ.openIframeModalDatatable({
 			url: '/admin/v9/files/file_prop?id=-1&dirPath=' + dir + "&fileName=" + file + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
 			width: 850,
 			height: 500,
-			buttonTitleKey: "button.save",
-			closeButtonPosition: "close-button-over",
-			closeAfterSave: false,
-			okclick: function() {
-				var iframe = $("#modalIframeIframeElement");
-				$("#datatableInit_modal > div > div > div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn.btn-primary", iframe.contents()).trigger("click");
-			}
+			buttonTitleKey: "button.save"
 		});
 
 		return dfrd.resolve();

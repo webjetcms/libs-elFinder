@@ -364,7 +364,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'perm'            : 'Povolenie', // from v2.1 added 20.6.2015
 			'mode'            : 'Režim', // from v2.1 added 20.6.2015
 			'emptyFolder'     : 'Priečinok je prázdny', // from v2.1.6 added 30.12.2015
-			'emptyFolderDrop' : 'Priečinok je prázdny, premiestnite alebo presunte položky', // from v2.1.6 added 30.12.2015
+			'emptyFolderDrop' : 'Priečinok je prázdny, premiestnite alebo presuňte položky', // from v2.1.6 added 30.12.2015
 			'emptyFolderLTap' : 'Priečinok je prázdny, dlhým kliknutím pridáte položky', // from v2.1.6 added 30.12.2015
 			'quality'         : 'Kvalita', // from v2.1.6 added 5.1.2016
 			'autoSync'        : 'Automatická synchronizácia', // from v2.1.6 added 10.1.2016
@@ -396,6 +396,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'emptyIncSearch'  : 'Výsledky vyhľadávania sú prázdne v aktuálnom zobrazení.\\Stlačením tlačidla [Enter] rozšírite vyhľadávanie cieľa.', // from v2.1.16 added 5.10.2016
 			'textLabel'       : 'Nápis textu', // from v2.1.17 added 13.10.2016
 			'minsLeft'        : '$1 minút ostáva', // from v2.1.17 added 13.11.2016
+			'selectionInfo'   : 'Informácie o výbere', // from v2.1.33 added 7.3.2018
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Neznámy',

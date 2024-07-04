@@ -21,7 +21,13 @@ elFinder.prototype.commands.wjfilearchive = function() {
     this.exec = function() {
         var dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); });
 
-        window.popup('/components/file_archiv/file_archiv_upload.jsp');
+        WJ.openIframeModalDatatable({
+			url: '/components/file_archiv/file_archiv_upload.jsp',
+			width: 850,
+			height: 500,
+			buttonTitleKey: "button.save"
+		});
+
 
         return dfrd.resolve();
     }
