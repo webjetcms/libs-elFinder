@@ -10,7 +10,7 @@ elFinder.prototype.commands.wjsearch = function() {
 	this.options        = {ui : 'wjsearchbutton'};
 	this.alwaysEnabled  = true;
 	this.updateOnSelect = false;
-	
+
 	/**
 	 * Return command status.
 	 * Search does not support old api.
@@ -35,14 +35,15 @@ elFinder.prototype.commands.wjsearch = function() {
 
 		return -1;
 	}
-	
+
 	/**
 	 * Send search request to backend.
 	 *
 	 * @param  String  search string
 	 * @return $.Deferred
 	 **/
-	this.exec = function(q, target, mime, type, recursive=false) {
+	this.exec = function(q, target, mime, type, recursive) {
+		if (typeof recursive == "undefined" || recursive == null) recursive = false;
 		var fm = this.fm,
 			reqDef = [],
 			sType = type || '',
@@ -55,7 +56,7 @@ elFinder.prototype.commands.wjsearch = function() {
 				return data;
 			},
 			rootCnt;
-		
+
 		if (typeof q == 'string' && q) {
 			if (typeof target == 'object') {
 				mime = target.mime || '';
@@ -65,7 +66,7 @@ elFinder.prototype.commands.wjsearch = function() {
 			if (mime) {
 				mime = $.trim(mime).replace(',', ' ').split(' ');
 				if (onlyMimes.length) {
-					mime = $.map(mime, function(m){ 
+					mime = $.map(mime, function(m){
 						m = $.trim(m);
 						return m && ($.inArray(m, onlyMimes) !== -1
 									|| $.grep(onlyMimes, function(om) { return m.indexOf(om) === 0? true : false; }).length
@@ -77,7 +78,7 @@ elFinder.prototype.commands.wjsearch = function() {
 			}
 
 			fm.trigger('searchstart', setType({query : q, target : target, mimes : mime}));
-			
+
 			if (! onlyMimes.length || mime.length) {
 				if (target === '' && fm.api >= 2.1) {
 					rootCnt = Object.keys(fm.roots).length;
@@ -120,29 +121,29 @@ elFinder.prototype.commands.wjsearch = function() {
 			} else {
 				reqDef = [$.Deferred().resolve({files: []})];
 			}
-			
+
 			fm.searchStatus.mixed = (reqDef.length > 1)? targetVolids : false;
-			
+
 			return $.when.apply($, reqDef).done(function(data) {
 				var argLen = arguments.length,
 					i;
-				
+
 				data.warning && fm.error(data.warning);
-				
+
 				if (argLen > 1) {
 					data.files = (data.files || []);
 					for(i = 1; i < argLen; i++) {
 						arguments[i].warning && fm.error(arguments[i].warning);
-						
+
 						if (arguments[i].files) {
 							data.files.push.apply(data.files, arguments[i].files);
 						}
 					}
 				}
-				
+
 				// because "preventDone : true" so update files cache
 				data.files && data.files.length && fm.cache(data.files);
-				
+
 				fm.lazy(function() {
 					fm.trigger('search', data);
 				}).then(function() {

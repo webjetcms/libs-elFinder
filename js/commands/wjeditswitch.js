@@ -2,15 +2,15 @@
 
 /**
  * @class elFinder command "wjeditswitch".
- * 
- * By file type, switch between wjedit and wjresize. 
- * 
+ *
+ * By file type, switch between wjedit and wjresize.
+ *
  * Purpose is to remove redundant icons.
- * 
+ *
  * @author Sebastian Ivan
  */
 elFinder.prototype.commands.wjeditswitch = function() {
-	
+
     this.updateOnSelect = true;
 
 	this.getstate = function(sel) {
@@ -34,22 +34,22 @@ elFinder.prototype.commands.wjeditswitch = function() {
 
         if(files[0].mime.indexOf('image/') === 0) {
             //If image is from /gallery open in new tab galleryDatatable with filtered image and open editor
-            let imageUrl = files[0].url;
+            var imageUrl = files[0].url;
             if(imageUrl != null && imageUrl.length > 0) {
-                let imageUrlArr = imageUrl.split('/');
+                var imageUrlArr = imageUrl.split('/');
 
                 //check if it's from gallery
-                let isGalleryImg = false;
-                imageUrlArr.forEach((imgUrl) => {
+                var isGalleryImg = false;
+                imageUrlArr.forEach(function(imgUrl) {
                     if(imgUrl === 'gallery') {
                         isGalleryImg = true;
 
-                        let dirPath = "";
-                        for(let i = 0; i < imageUrlArr.length - 1; i++) {
+                        var dirPath = "";
+                        for(var i = 0; i < imageUrlArr.length - 1; i++) {
                             dirPath += imageUrlArr[i] + '/';
                         }
 
-                        let imageName = imageUrlArr[imageUrlArr.length - 1];
+                        var imageName = imageUrlArr[imageUrlArr.length - 1];
                         if(imageName.startsWith("s_")) imageName = imageName.substring(2);
                         else if(imageName.startsWith("o_")) imageName = imageName.substring(2);
                         window.open("/admin/v9/apps/gallery/?dir=" + dirPath + "#dt-open-editor=true&dt-filter-imageName=" + imageName);
