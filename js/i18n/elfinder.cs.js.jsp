@@ -263,6 +263,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'sortmode'          : 'dle módu', // from v2.1.13 added 13.06.2016
 			'sortowner'         : 'dle majitele', // from v2.1.13 added 13.06.2016
 			'sortgroup'         : 'dle skupiny', // from v2.1.13 added 13.06.2016
+			'sortsort_priority' : 'dle pořadí', // from 04.08.2020
 			'sortAlsoTreeview'  : 'Také stromové zobrazení', // from v2.1.15 added 01.08.2016
 
 			/********************************** new items **********************************/
@@ -395,6 +396,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'emptyIncSearch'  : 'Výsledky hledání jsou prázdné v aktuálním zobrazení.\\Stisknutím tlačítka [Enter] rozšíříte vyhledávání cíle.', // from v2.1.16 added 5.10.2016
 			'textLabel'       : 'Nápis textu', // from v2.1.17 added 13.10.2016
 			'minsLeft'        : '$1 minut zůstává', // from v2.1.17 added 13.11.2016
+			'selectionInfo'   : 'Informace o výběru', // from v2.1.33 added 7.3.2018
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Neznámý',

@@ -154,7 +154,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdcolwidth'  : 'Resetovať šírku stĺpca', // from v2.1.13 added 12.06.2016
 			'cmdfullscreen': 'Celá obrazovka', // from v2.1.15 added 03.08.2016
 			'cmdmove'      : 'Posúvať', // from v2.1.15 added 21.08.2016
-			'cmdwjdirprops'  : 'Nastavenie adresáru',
+			'cmdwjdirprops'  : 'Nastavenie priečinka',
 			'cmdwjfileprops' : 'Nastavenie súboru',
 			'cmdwjmetadata' : 'Bezpečnostné nastavenia def',
             'cmdwjfileupdate'  : 'Aktualizovať súbor',
