@@ -1,10 +1,10 @@
 {
   "name": "@webjetcms/elfinder",
   "description": "File manager for web",
-  "version": "2.1.650",
-  "main": "Jakefile.js",
+  "version": "2.1.651",
+  "main": "dist/js/elfinder.full.js",
   "scripts": {
-    "build": "mkdir -p ./build && jake -C ./build elfinder --trace"
+    "build": "mkdir -p ./dist && jake -C ./dist elfinder --trace"
   },
   "repository": {
     "type": "git",
