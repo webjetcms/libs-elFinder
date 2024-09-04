@@ -1,7 +1,9 @@
 {
   "name": "@webjetcms/elfinder",
   "description": "File manager for web",
-  "version": "2.1.651",
+  "version": "2.1.652",
+
+  "files": ["dist/**"],
   "main": "dist/js/elfinder.full.js",
   "scripts": {
     "build": "mkdir -p ./dist && jake -C ./dist elfinder --trace"
