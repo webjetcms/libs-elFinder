@@ -61,12 +61,13 @@
 					
 					fm.trigger('getfile', {files : data});
 					
-					try {
-						res = self.callback(data, fm);
-					} catch(e) {
-						fail(['Error in `getFileCallback`.', e.message]);
-						return;
-					}
+					//TODO - this part was doing problem (maybe next update will fix it)
+					// try {
+					// 	res = self.callback(data, fm);
+					// } catch(e) {
+					// 	fail(['Error in `getFileCallback`.', e.message]);
+					// 	return;
+					// }
 					
 					if (typeof res === 'object' && typeof res.done === 'function') {
 						res.done(done).fail(fail);

@@ -3,7 +3,7 @@
  *
  * @author Dmitry (dio) Levashov
  **/
-$.fn.elfindersearchbutton = function(cmd) {
+$.fn.elfinderwjsearchbutton = function(cmd) {
 	"use strict";
 	return this.each(function() {
 		var result = false,
@@ -49,14 +49,16 @@ $.fn.elfindersearchbutton = function(cmd) {
 				if (typeSet) {
 					type = typeSet.children('input:checked').val();
 				}
+				var recursive=false;
+				if ($('#' + id('SearchFromCwdRecursive')).prop('checked')) recursive = true;
 				if (val) {
 					input.trigger('focus');
-					cmd.exec(val, from, mime, type).done(function() {
+					cmd.exec(val, from, mime, type, recursive).done(function() {
 						result = true;
 					}).fail(function() {
 						abort();
 					});
-					
+
 				} else {
 					fm.trigger('searchend');
 				}
@@ -118,7 +120,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 					}
 				}),
 			opts, typeSet, cwdReady, inFocus;
-		
+
 		if (isopts.enable) {
 			isopts.minlen = isopts.minlen || 2;
 			isopts.wait = isopts.wait || 500;
@@ -144,12 +146,12 @@ $.fn.elfindersearchbutton = function(cmd) {
 								incVal = val;
 								if (val === '' && fm.searchStatus.state > 1 && fm.searchStatus.query) {
 									input.val(fm.searchStatus.query).trigger('select');
-								} 
+								}
 							}
 						}, isopts.wait));
 					}
 				});
-			
+
 			if (fm.UA.ltIE8) {
 				input.on('keydown', function(e) {
 						if (e.keyCode === 229) {
@@ -170,7 +172,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 					});
 			}
 		}
-		
+
 		$('<span class="ui-icon ui-icon-search" title="'+cmd.title+'"></span>')
 			.appendTo(button)
 			.on('mousedown', function(e) {
@@ -182,7 +184,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 					input.trigger('focus');
 				}
 			});
-		
+
 		$('<span class="ui-icon ui-icon-close"></span>')
 			.appendTo(button)
 			.on('mousedown', function(e) {
@@ -194,7 +196,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 					abort();
 				}
 			});
-		
+
 		// wait when button will be added to DOM
 		fm.bind('toolbarload', function(){
 			var parent = button.parent();
@@ -211,7 +213,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 				}
 			}
 		});
-		
+
 		fm
 			.one('init', function() {
 				fm.getUI('cwd').on('touchstart click', function() {
@@ -224,12 +226,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 						$('<div class="buttonset"></div>')
 							.append(
 								$('<input id="'+id('SearchFromCwd')+'" name="serchfrom" type="radio" checked="checked"/><label for="'+id('SearchFromCwd')+'">'+fm.i18n('btnCwd')+'</label>'),
-								$('<input id="'+id('SearchFromVol')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromVol')+'">'+fm.i18n('btnVolume')+'</label>'),
-								$('<input id="'+id('SearchFromAll')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromAll')+'">'+fm.i18n('btnAll')+'</label>')
-							),
-						$('<div class="buttonset elfinder-search-type"></div>')
-							.append(
-								$('<input id="'+id('SearchName')+'" name="serchcol" type="radio" checked="checked" value="SearchName"/><label for="'+id('SearchName')+'">'+fm.i18n('btnFileName')+'</label>')
+								$('<input id="'+id('SearchFromCwdRecursive')+'" name="serchfrom" type="radio"/><label for="'+id('SearchFromCwdRecursive')+'">'+fm.i18n('wjSearchRecursive')+'</label>')
 							)
 					)
 					.hide()
@@ -269,12 +266,12 @@ $.fn.elfindersearchbutton = function(cmd) {
 			.bind('open parents', function() {
 				var dirs    = [],
 					volroot = fm.file(fm.root(fm.cwd().hash));
-				
+
 				if (volroot) {
 					$.each(fm.parents(fm.cwd().hash), function(i, hash) {
 						dirs.push(fm.file(hash).name);
 					});
-		
+
 					$('#'+id('SearchFromCwd')).next('label').attr('title', fm.i18n('searchTarget', dirs.join(fm.option('separator'))));
 					$('#'+id('SearchFromVol')).next('label').attr('title', fm.i18n('searchTarget', volroot.name));
 				}
@@ -298,16 +295,17 @@ $.fn.elfindersearchbutton = function(cmd) {
 			.shortcut({
 				pattern     : 'ctrl+f f3',
 				description : cmd.title,
-				callback    : function() { 
+				callback    : function() {
 					input.trigger('select').trigger('focus');
 				}
 			})
+			//TODO - do we want this ?
 			.shortcut({
 				pattern     : 'a b c d e f g h i j k l m n o p q r s t u v w x y z dig0 dig1 dig2 dig3 dig4 dig5 dig6 dig7 dig8 dig9 num0 num1 num2 num3 num4 num5 num6 num7 num8 num9',
 				description : fm.i18n('firstLetterSearch'),
-				callback    : function(e) { 
+				callback    : function(e) {
 					if (! cwdReady) { return; }
-					
+
 					var code = e.originalEvent.keyCode,
 						next = function() {
 							var sel = fm.selected(),

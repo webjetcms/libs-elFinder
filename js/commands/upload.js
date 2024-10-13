@@ -84,6 +84,8 @@ elFinder.prototype.commands.upload = function() {
 								fm.toast({msg: fm.i18n(['complete', fm.i18n('cmdupload')]), extNode: node});
 							}
 						}
+						//Refresh to show uploaded files
+						fm.getCommand('reload').exec();
 					})
 					.progress(function() {
 						dfrd.notifyWith(this, Array.from(arguments));
@@ -313,10 +315,12 @@ elFinder.prototype.commands.upload = function() {
 		
 		dialog = $('<div class="elfinder-upload-dialog-wrapper"></div>')
 			.append(inputButton('multiple', 'selectForUpload'));
-		
-		if (! fm.UA.Mobile && (function(input) {
-			return (typeof input.webkitdirectory !== 'undefined' || typeof input.directory !== 'undefined');})(document.createElement('input'))) {
-			dialog.append(inputButton('multiple webkitdirectory directory', 'selectFolder'));
+
+		if(fm.options.onlyClassicFileUpload != true) {
+			if (! fm.UA.Mobile && (function(input) {
+				return (typeof input.webkitdirectory !== 'undefined' || typeof input.directory !== 'undefined');})(document.createElement('input'))) {
+				dialog.append(inputButton('multiple webkitdirectory directory', 'selectFolder'));
+			}
 		}
 		
 		if (targetDir.dirs) {
@@ -340,67 +344,68 @@ elFinder.prototype.commands.upload = function() {
 			}
 		}
 		
-		if (fm.dragUpload) {
-			dropbox = $('<div class="ui-corner-all elfinder-upload-dropbox elfinder-tabstop" contenteditable="true" data-ph="'+fm.i18n('dropPasteFiles')+'"></div>')
-				.on('paste', function(e){
-					paste(e);
-				})
-				.on('mousedown click', function(){
-					$(this).trigger('focus');
-				})
-				.on('focus', function(){
-					this.innerHTML = '';
-				})
-				.on('mouseover', function(){
-					$(this).addClass(hover);
-				})
-				.on('mouseout', function(){
-					$(this).removeClass(hover);
-				})
-				.on('dragenter', function(e) {
-					e.stopPropagation();
-				  	e.preventDefault();
-				  	$(this).addClass(hover);
-				})
-				.on('dragleave', function(e) {
-					e.stopPropagation();
-				  	e.preventDefault();
-				  	$(this).removeClass(hover);
-				})
-				.on('dragover', function(e) {
-					e.stopPropagation();
-				  	e.preventDefault();
-					e.originalEvent.dataTransfer.dropEffect = 'copy';
-					$(this).addClass(hover);
-				})
-				.on('drop', function(e) {
-					dialog.elfinderdialog('close');
-					targets && (e.originalEvent._target = targets[0]);
-					dropUpload(e.originalEvent);
-				})
-				.prependTo(dialog)
-				.after('<div class="elfinder-upload-dialog-or">'+fm.i18n('or')+'</div>')[0];
-			
-		} else {
-			pastebox = $('<div class="ui-corner-all elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropFilesBrowser')+'</div>')
-				.on('paste drop', function(e){
-					paste(e);
-				})
-				.on('mousedown click', function(){
-					$(this).trigger('focus');
-				})
-				.on('focus', function(){
-					this.innerHTML = '';
-				})
-				.on('dragenter mouseover', function(){
-					$(this).addClass(hover);
-				})
-				.on('dragleave mouseout', function(){
-					$(this).removeClass(hover);
-				})
-				.prependTo(dialog)
-				.after('<div class="elfinder-upload-dialog-or">'+fm.i18n('or')+'</div>')[0];
-			
+		if(fm.options.onlyClassicFileUpload != true) {
+			if (fm.dragUpload) {
+				dropbox = $('<div class="ui-corner-all elfinder-upload-dropbox elfinder-tabstop" contenteditable="true" data-ph="'+fm.i18n('dropPasteFiles')+'"></div>')
+					.on('paste', function(e){
+						paste(e);
+					})
+					.on('mousedown click', function(){
+						$(this).trigger('focus');
+					})
+					.on('focus', function(){
+						this.innerHTML = '';
+					})
+					.on('mouseover', function(){
+						$(this).addClass(hover);
+					})
+					.on('mouseout', function(){
+						$(this).removeClass(hover);
+					})
+					.on('dragenter', function(e) {
+						e.stopPropagation();
+						e.preventDefault();
+						$(this).addClass(hover);
+					})
+					.on('dragleave', function(e) {
+						e.stopPropagation();
+						e.preventDefault();
+						$(this).removeClass(hover);
+					})
+					.on('dragover', function(e) {
+						e.stopPropagation();
+						e.preventDefault();
+						e.originalEvent.dataTransfer.dropEffect = 'copy';
+						$(this).addClass(hover);
+					})
+					.on('drop', function(e) {
+						dialog.elfinderdialog('close');
+						targets && (e.originalEvent._target = targets[0]);
+						dropUpload(e.originalEvent);
+					})
+					.prependTo(dialog)
+					.after('<div class="elfinder-upload-dialog-or">'+fm.i18n('or')+'</div>')[0];
+				
+			} else {
+				pastebox = $('<div class="ui-corner-all elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropFilesBrowser')+'</div>')
+					.on('paste drop', function(e){
+						paste(e);
+					})
+					.on('mousedown click', function(){
+						$(this).trigger('focus');
+					})
+					.on('focus', function(){
+						this.innerHTML = '';
+					})
+					.on('dragenter mouseover', function(){
+						$(this).addClass(hover);
+					})
+					.on('dragleave mouseout', function(){
+						$(this).removeClass(hover);
+					})
+					.prependTo(dialog)
+					.after('<div class="elfinder-upload-dialog-or">'+fm.i18n('or')+'</div>')[0];
+			}
 		}
 		
 		uidialog = this.fmDialog(dialog, {
@@ -416,6 +421,9 @@ elFinder.prototype.commands.upload = function() {
 				}
 			}
 		});
+
+		//Auto click to select file
+		$("#finder > div.elfinder-dialog.elfinder-dialog-upload > div > div > div.ui-button > form > input[type=file]").click();
 		
 		return dfrd;
 	};

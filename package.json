@@ -1,13 +1,16 @@
 {
-  "name": "elFinder",
+  "name": "@webjetcms/elfinder",
   "description": "File manager for web",
-  "main": "Jakefile.js",
+  "version": "2.1.652",
+
+  "files": ["dist/**"],
+  "main": "dist/js/elfinder.full.js",
   "scripts": {
-    "build": "mkdir -p ./build && jake -C ./build elfinder"
+    "build": "mkdir -p ./dist && jake -C ./dist elfinder --trace"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Studio-42/elFinder.git"
+    "url": "https://github.com/webjetcms/libs-elFinder"
   },
   "keywords": [
     "file",
