@@ -22,11 +22,10 @@ elFinder.prototype.commands.resize = function() {
 			files = this.files(hashes),
 			dfrd  = $.Deferred(),
 
-			open = function(file, id) {
+			open = function(file) {
 				var index = file.virtualPath.lastIndexOf("/");
-				var iID = -1;
 				var dir = file.virtualPath.substring(0, index);
-				var name = file.virtualPath.substring(index+1);
+				var name = file.virtualPath.substring(index + 1);
 
 				var width = 990;
 				var height = 720;
@@ -41,28 +40,67 @@ elFinder.prototype.commands.resize = function() {
 					height = screen.height - 150;
 				}
 
-				var myWindow = window.open("/admin/v9/apps/image-editor/?iID=" + iID + "&dir=" + dir + "&name=" + name, "tinyWindow", "toolbar=no,scrollbars=yes,resizable=yes,width=" + width + ",height=" + height + ";");
-			},
+				window.addEventListener("WJ.AdminUpload.ImageEditor.success", function(e) {
+					console.log("Upload success", e);
+				});
 
-			id, dialog
-			;
+				WJ.openIframeModalDatatable({
+					url: '/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true',
+					width: width,
+					height: height,
+					buttonTitleKey: "button.save",
+					okclick: function() {
+						let isEditorActiveTab = $('#modalIframeIframeElement').contents().find("#pills-dt-galleryTable-photoeditor-tab").hasClass("active");
+						if(isEditorActiveTab) {
+							//Handle EDITOR tab
+							$('#modalIframeIframeElement').contents().find('div.modal.DTED.show div.DTE_Footer button.btn-primary').trigger("click");
+							$("#modalIframe").find(".modal-header").hide();
+							$("#modalIframe").find(".modal-footer").hide();
 
+							let loaderText = WJ.translate("components.image_editor.saving.js");
+							$(".hide-while-loading").hide();
+							let loaderEl = $("#webjetAnimatedLoader");
+							if (loaderEl.length<1) {
+								let loaderText = WJ.translate("webjetjs.webjetAnimatedLoader.text.js");
+								loaderEl = $(`
+								<div id="webjetAnimatedLoader">
+									<div class="lds-dual-ring"></div>
+									<p class="loaderText">${loaderText}</p>
+								</div>`);
+								loaderEl.insertAfter( $('#modalIframeIframeElement').contents().find("#modalIframeLoader") );
+							}
+							if (loaderText != null) loaderEl.find(".loaderText").text(loaderText);
+							loaderEl.show();
+
+							return false;
+						} else {
+							// basic submit and close modal
+							$('#modalIframeIframeElement').contents().find('div.modal.DTED.show div.DTE_Footer button.btn-primary').trigger("click");
+
+							setTimeout(function() { $('#finder').elfinder('instance').exec('reload'); }, 1000);
+
+							return true;
+						}
+					},
+					onload: function(detail) {
+						let iframeWindow = detail.window;
+						iframeWindow.addEventListener("WJ.AdminUpload.ImageEditor.success", function(e) {
+							WJ.closeIframeModal();
+
+							$("#modalIframe").find(".modal-header").show();
+							$("#modalIframe").find(".modal-footer").show();
+
+							$('#finder').elfinder('instance').exec('reload');
+						});
+					}
+				});
+			};
 
 		if (!files.length || files[0].mime.indexOf('image/') === -1) {
 			return dfrd.reject();
 		}
 
-		id = 'resize-'+fm.namespace+'-'+files[0].hash;
-		/*
-		dialog = fm.getUI().find('#'+id);
-
-		if (dialog.length) {
-			dialog.elfinderdialog('toTop');
-			return dfrd.resolve();
-		}
-		*/
-
-		open(files[0], id);
+		open(files[0]);
 
 		return dfrd;
 	};
