@@ -40,59 +40,32 @@ elFinder.prototype.commands.resize = function() {
 					height = screen.height - 150;
 				}
 
-				window.addEventListener("WJ.AdminUpload.ImageEditor.success", function(e) {
-					console.log("Upload success", e);
+				let openedWindow = WJ.openPopupDialog('/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true', width, height);
+				let closeBtn;
+				let saveBtn;
+
+				openedWindow.addEventListener("WJ.DTE.opened", function(e) {
+					//Remove close button action from table
+					openedWindow.$("#galleryTable_modal").off();
+
+					//Get buttons instances
+					closeBtn = openedWindow.$("div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn-close-editor");
+					saveBtn = openedWindow.$("div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn-primary");
+
+					//Prepare new close button action
+					closeBtn.on("click", function() {
+						openedWindow.close();
+					});
+
+					//
+					saveBtn.on("click", function() {
+						$('#finder').elfinder('instance').exec('reload');
+					});
 				});
 
-				WJ.openIframeModalDatatable({
-					url: '/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true',
-					width: width,
-					height: height,
-					buttonTitleKey: "button.save",
-					okclick: function() {
-						let isEditorActiveTab = $('#modalIframeIframeElement').contents().find("#pills-dt-galleryTable-photoeditor-tab").hasClass("active");
-						if(isEditorActiveTab) {
-							//Handle EDITOR tab
-							$('#modalIframeIframeElement').contents().find('div.modal.DTED.show div.DTE_Footer button.btn-primary').trigger("click");
-							$("#modalIframe").find(".modal-header").hide();
-							$("#modalIframe").find(".modal-footer").hide();
-
-							let loaderText = WJ.translate("components.image_editor.saving.js");
-							$(".hide-while-loading").hide();
-							let loaderEl = $("#webjetAnimatedLoader");
-							if (loaderEl.length<1) {
-								let loaderText = WJ.translate("webjetjs.webjetAnimatedLoader.text.js");
-								loaderEl = $(`
-								<div id="webjetAnimatedLoader">
-									<div class="lds-dual-ring"></div>
-									<p class="loaderText">${loaderText}</p>
-								</div>`);
-								loaderEl.insertAfter( $('#modalIframeIframeElement').contents().find("#modalIframeLoader") );
-							}
-							if (loaderText != null) loaderEl.find(".loaderText").text(loaderText);
-							loaderEl.show();
-
-							return false;
-						} else {
-							// basic submit and close modal
-							$('#modalIframeIframeElement').contents().find('div.modal.DTED.show div.DTE_Footer button.btn-primary').trigger("click");
-
-							setTimeout(function() { $('#finder').elfinder('instance').exec('reload'); }, 1000);
-
-							return true;
-						}
-					},
-					onload: function(detail) {
-						let iframeWindow = detail.window;
-						iframeWindow.addEventListener("WJ.AdminUpload.ImageEditor.success", function(e) {
-							WJ.closeIframeModal();
-
-							$("#modalIframe").find(".modal-header").show();
-							$("#modalIframe").find(".modal-footer").show();
-
-							$('#finder').elfinder('instance').exec('reload');
-						});
-					}
+				openedWindow.addEventListener("WJ.imageEditor.upload.success", function(e) {
+					//Call relaod after picture is uploaded successfully
+					$('#finder').elfinder('instance').exec('reload');
 				});
 			};
 
