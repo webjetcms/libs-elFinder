@@ -25,15 +25,17 @@ elFinder.prototype.commands.wjfileupdate = function() {
 		}
 
 		var data;
+		var file;
 		try {
-			var file = this.files(hashes)[0];
+			file = this.files(hashes)[0];
 			data = [file.hash];
 		} catch(e) {
 			return dfrd.reject("File not found.");
 		}
 
 		if ($('#finder').length > 0) {
-            $('#finder').elfinder('instance').exec('upload', data);
+			//Exec elfinder command upload with param fileToUpdate (soo file will be updated)
+            $('#finder').elfinder('instance').exec('upload', data, file);
     	}
     	else {
 			return dfrd.reject("Cannot find elfinder element");

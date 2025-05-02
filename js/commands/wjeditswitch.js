@@ -59,7 +59,7 @@ elFinder.prototype.commands.wjeditswitch = function() {
                 });
             }
 
-            $('#finder').elfinder('instance').exec('resize', files[0].hash); //Its wjresize BUT it's registre as resize
+            if (isGalleryImg==false) $('#finder').elfinder('instance').exec('resize', files[0].hash); //Its wjresize BUT it's registre as resize
         } else {
             $('#finder').elfinder('instance').exec('wjedit', files[0].hash);
         }

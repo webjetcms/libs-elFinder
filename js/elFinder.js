@@ -7511,7 +7511,8 @@ elFinder.prototype = {
 									if (!data.hashes) {
 										data.hashes = {};
 									}
-									result[1] = $.map(result[1], function(p, i) {
+									//WebJET CMS - backend did not return hashes and upload executor didn't use it
+									/*result[1] = $.map(result[1], function(p, i) {
 										result[0][i]._relativePath = p.replace(/^\//, '');
 										p = p.replace(/\/[^\/]*$/, '');
 										if (p === '') {
@@ -7528,7 +7529,7 @@ elFinder.prototype = {
 									});
 									if (rm) {
 										result[0] = $.grep(result[0], function(file) { return file._remove? false : true; });
-									}
+									}*/
 								})
 								.always(function(data) {
 									if (multiMax) {

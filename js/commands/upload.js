@@ -33,7 +33,7 @@ elFinder.prototype.commands.upload = function() {
 	};
 	
 	
-	this.exec = function(data) {
+	this.exec = function(data, fileToUpdate = null) {
 		var fm = this.fm,
 			cwdHash = fm.cwd().hash,
 			getTargets = function() {
@@ -81,6 +81,7 @@ elFinder.prototype.commands.upload = function() {
 								} else {
 									fm.trigger('selectfiles', {files : $.map(data.added, function(f) {return f.hash;})});
 								}
+
 								fm.toast({msg: fm.i18n(['complete', fm.i18n('cmdupload')]), extNode: node});
 							}
 						}
@@ -96,6 +97,13 @@ elFinder.prototype.commands.upload = function() {
 				if (targets) {
 					data.target = targets[0];
 				}
+
+				//WebJetCMS - when fileToUpdate is set it's our custom action UPDATE -> change target
+				if(isFileToUpdateSet(fileToUpdate) == true) {
+					//Set fileToUpdate as target , not the folder -> file will be updated
+					data.target = fileToUpdate.hash;
+				}
+
 				fmUpload(data);
 			},
 			getSelector = function() {
@@ -152,6 +160,9 @@ elFinder.prototype.commands.upload = function() {
 				var button,
 					input = $('<input type="file" ' + type + '/>')
 					.on('click', function() {
+						//WebJetCMS - when selecting new file close custom error dialog
+						closeCustomErrorDialog();
+
 						// for IE's bug
 						if (fm.UA.IE) {
 							setTimeout(function() {
@@ -163,7 +174,8 @@ elFinder.prototype.commands.upload = function() {
 						}
 					})
 					.on('change', function() {
-						upload({input : input.get(0), type : 'files'});
+						//WebJetCMS
+						if(isInputValid(fm, input, fileToUpdate) === true) upload({input : input.get(0), type : 'files'});
 					})
 					.on('dragover', function(e) {
 						e.originalEvent.dataTransfer.dropEffect = 'copy';
@@ -316,7 +328,7 @@ elFinder.prototype.commands.upload = function() {
 		dialog = $('<div class="elfinder-upload-dialog-wrapper"></div>')
 			.append(inputButton('multiple', 'selectForUpload'));
 
-		if(fm.options.onlyClassicFileUpload != true) {
+		if(isFileToUpdateSet(fileToUpdate) != true) {
 			if (! fm.UA.Mobile && (function(input) {
 				return (typeof input.webkitdirectory !== 'undefined' || typeof input.directory !== 'undefined');})(document.createElement('input'))) {
 				dialog.append(inputButton('multiple webkitdirectory directory', 'selectFolder'));
@@ -344,7 +356,7 @@ elFinder.prototype.commands.upload = function() {
 			}
 		}
 		
-		if(fm.options.onlyClassicFileUpload != true) {
+		if(isFileToUpdateSet(fileToUpdate) != true) {
 			if (fm.dragUpload) {
 				dropbox = $('<div class="ui-corner-all elfinder-upload-dropbox elfinder-tabstop" contenteditable="true" data-ph="'+fm.i18n('dropPasteFiles')+'"></div>')
 					.on('paste', function(e){
@@ -419,13 +431,73 @@ elFinder.prototype.commands.upload = function() {
 				if (cm.is(':visible')) {
 					cm.click();
 				}
+
+				//WebJetCMS - when dialog closed, close custom error dialog
+				closeCustomErrorDialog();
 			}
 		});
-
-		//Auto click to select file
-		$("#finder > div.elfinder-dialog.elfinder-dialog-upload > div > div > div.ui-button > form > input[type=file]").click();
-		
 		return dfrd;
 	};
 
 };
+
+/**
+ * Check if given fileToUpdate is NOT UNDEFINED and NOT NULL.
+ * Then check if hash is NOT UNDEFINED and NOT NULL.
+ * @param {*} fileToUpdate 
+ * @returns 
+ */
+function isFileToUpdateSet(fileToUpdate) {
+	if(fileToUpdate != null && fileToUpdate != undefined && fileToUpdate.hash != undefined && fileToUpdate.hash != null) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Decide if upload is VALID.
+ * During UPDATE (custom action) there must be selected only 1 file and type must match.
+ * If input is NOT VALID, show custom error dialog. 
+ */
+function isInputValid(fm, input, fileToUpdate) {
+	var isInputValid = true;
+	var errMsg = "";
+
+	if(isFileToUpdateSet(fileToUpdate) == true) {
+		//Soo its update - must be only 1 file and type must match
+		var fileList = input[0].files;
+		if(fileList.length != 1) {
+			isInputValid = false;
+			errMsg = fm.i18n('wjfileupdate-onlyOneFileErr');
+		} else if(fileList[0].type !== fileToUpdate.mime) {
+			isInputValid = false;
+			errMsg = fm.i18n('wjfileupdate-typeMismatch') + fileToUpdate.mime;
+		}
+	}
+
+	if(isInputValid === false) {
+		//Create custom error dialog
+		fm.notify({
+			type : 'customError',
+			id : "customErrorDialog",
+			cnt : 0.5,
+			hideCnt: true,
+			msg : errMsg,
+			cancel: function() {}
+		});
+	}
+
+	return isInputValid;
+}
+
+/**
+ * WebJetCMS
+ * Find and close our custom generated error dialog
+ */
+function closeCustomErrorDialog() {
+	let customErrDialog = $(".elfinder-notify-customErrorDialog > .elfinder-notify-cancel > span");
+	if(customErrDialog !== undefined && customErrDialog !== null && customErrDialog.length > 0) {
+		//Close dialog with click 
+		customErrDialog.click();
+	}
+}
