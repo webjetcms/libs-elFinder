@@ -33,7 +33,8 @@ elFinder.prototype.commands.upload = function() {
 	};
 	
 	
-	this.exec = function(data, fileToUpdate = null) {
+	this.exec = function(data, fileToUpdate) {
+		fileToUpdate = fileToUpdate || null;
 		var fm = this.fm,
 			cwdHash = fm.cwd().hash,
 			getTargets = function() {
@@ -495,9 +496,9 @@ function isInputValid(fm, input, fileToUpdate) {
  * Find and close our custom generated error dialog
  */
 function closeCustomErrorDialog() {
-	let customErrDialog = $(".elfinder-notify-customErrorDialog > .elfinder-notify-cancel > span");
-	if(customErrDialog !== undefined && customErrDialog !== null && customErrDialog.length > 0) {
-		//Close dialog with click 
-		customErrDialog.click();
+	var customErrDialog = $(".elfinder-notify-customErrorDialog > .elfinder-notify-cancel > span");
+	if (customErrDialog !== undefined && customErrDialog !== null && customErrDialog.length > 0) {
+		// Close dialog with click 
+		customErrDialog.trigger('click');
 	}
 }

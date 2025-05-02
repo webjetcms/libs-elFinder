@@ -40,9 +40,9 @@ elFinder.prototype.commands.resize = function() {
 					height = screen.height - 150;
 				}
 
-				let openedWindow = WJ.openPopupDialog('/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true', width, height);
-				let closeBtn;
-				let saveBtn;
+				var openedWindow = WJ.openPopupDialog('/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true', width, height);
+				var closeBtn;
+				var saveBtn;
 
 				openedWindow.addEventListener("WJ.DTE.opened", function(e) {
 					//Remove close button action from table
