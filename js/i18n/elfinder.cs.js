@@ -131,7 +131,7 @@
 			'cmdgetfile'   : 'Vybrat soubory',
 			'cmdhelp'      : 'O softwaru',
 			'cmdhome'      : 'Domů',
-			'cmdinfo'      : 'Zobrazit informace',
+			'cmdinfo'      : 'Získat info', //WEBJET UPDATED
 			'cmdmkdir'     : 'Nová složka',
 			'cmdmkdirin'   : 'Do nové složky', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : 'Nový soubor',
@@ -574,8 +574,20 @@
 			'kindVideoWM'     : 'Windows Media video',
 			'kindVideoFlash'  : 'Flash video',
 			'kindVideoMKV'    : 'Matroska video',
-			'kindVideoOGG'    : 'Ogg video'
+			'kindVideoOGG'    : 'Ogg video',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Zobrazit soubor',
+            'cmdresize'    : 'Editovat',
+			'wjSearchRecursive': 'V podadresářích',
+			'cmdwjeditswitch': 'Upravit',
+			'cmdwjfilearchive': 'Manažer dokumentů',
+			'cmdwjdirprops'  : 'Nastavení složky',
+			'cmdwjfileprops' : 'Nastavení souboru',
+			'cmdwjmetadata' : 'Bezpečnostní nastavení',
+			'cmdwjfileupdate'  : 'Aktualizovat soubor',
+			'wjfileupdate-onlyOneFileErr': 'Při aktualizaci souboru lze vybrat pouze jeden soubor',
+			'wjfileupdate-typeMismatch': 'Typ vybraného souboru musí být stejný jako typ souboru, který se má aktualizovat a to : '
 		}
 	};
 }));
-
