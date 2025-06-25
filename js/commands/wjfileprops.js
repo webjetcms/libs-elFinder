@@ -36,7 +36,7 @@ elFinder.prototype.commands.wjfileprops = function() {
 		var file = fileVirtualPath.substring(fileVirtualPath.lastIndexOf('/') + 1);
 
 		WJ.openIframeModalDatatable({
-			url: '/admin/v9/files/file_prop?id=-1&dirPath=' + dir + "&fileName=" + file + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
+			url: '/admin/v9/files/file_prop/?id=-1&dirPath=' + dir + "&fileName=" + file + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
 			width: 850,
 			height: 500,
 			buttonTitleKey: "button.save"

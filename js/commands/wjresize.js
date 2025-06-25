@@ -40,7 +40,7 @@ elFinder.prototype.commands.resize = function() {
 					height = screen.height - 150;
 				}
 
-				var openedWindow = WJ.openPopupDialog('/admin/v9/apps/image-editor?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true', width, height);
+				var openedWindow = WJ.openPopupDialog('/admin/v9/apps/image-editor/?id=-1&dir=' + dir + '&name=' + name + '&showOnlyEditor=true', width, height);
 				var closeBtn;
 				var saveBtn;
 

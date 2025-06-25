@@ -33,7 +33,7 @@ elFinder.prototype.commands.wjdirprops = function() {
 		}
 
 		WJ.openIframeModalDatatable({
-			url: '/admin/v9/files/folder_prop?id=-1&dirPath=' + fileVirtualPath + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
+			url: '/admin/v9/files/folder_prop/?id=-1&dirPath=' + fileVirtualPath + "&fileIndexerPerm=" + haveFileIndexerPerm + "&showOnlyEditor=true",
 			width: 850,
 			height: 500,
 			buttonTitleKey: "button.save"
