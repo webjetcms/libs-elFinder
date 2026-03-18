@@ -550,6 +550,7 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'kindPSD'         : 'Adobe Photoshop image',
 			'kindXBITMAP'     : 'X bitmap image',
 			'kindPXM'         : 'Pixelmator image',
+			'kindWEBP'        : 'WEBP image',
 			// media
 			'kindAudio'       : 'Audio media',
 			'kindAudioMPEG'   : 'MPEG audio',
