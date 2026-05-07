@@ -75,7 +75,7 @@ $.fn.elfinderwjsearchbutton = function(cmd) {
 				}
 			},
 			incVal = '',
-			input  = $('<input type="text" size="42"/>')
+			input  = $('<input type="text" size="42" name="wjsearch"/>').attr('aria-label', fm.i18n('wjsearch-title'))
 				.on('focus', function() {
 					// close other menus
 					!button.hasClass('ui-state-active') && fm.getUI().click();

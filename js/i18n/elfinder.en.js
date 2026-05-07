@@ -581,7 +581,8 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'cmdwjmetadata' : 'Permissions',
 			'cmdwjfileupdate'  : 'Update file',
 			'wjfileupdate-onlyOneFileErr': 'Only one file can be selected when updating a file',
-			'wjfileupdate-typeMismatch': 'The type of the selected file must be the same as the type of the file to be updated, namely: '
+			'wjfileupdate-typeMismatch': 'The type of the selected file must be the same as the type of the file to be updated, namely: ',
+			'wjsearch-title' : 'Search'
 		}
 	};
 }
