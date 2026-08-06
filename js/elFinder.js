@@ -6211,7 +6211,7 @@ elFinder.prototype = {
 
                         // normalize NFD (macOS) to NFC so server-side names match
                         try {
-                            if (name?.normalize) {
+                            if (name && name.normalize) {
                                 name = name.normalize('NFC');
                             }
                         } catch (e) {
