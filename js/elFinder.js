@@ -6203,6 +6203,7 @@ elFinder.prototype = {
 
 					var virtualPath = fm.cwd().virtualPath;
 					var useInternationalToEnglish = virtualPath.indexOf("/files") == 0 || virtualPath.indexOf("/images") == 0;
+					if (WJ.hasPermission("fbrowser_allow_diacritics")===true) useInternationalToEnglish = false;
 
 					names = $.map(files, function(file, i)
 					{

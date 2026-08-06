@@ -1,3 +1,7 @@
+2026-08-06 Lubos Balat
+	* elfinder (2.1.658)
+		- fix filename check before upload with permission fbrowser_allow_diacritics (#58317-12)
+
 2026-05-07 Lubos Balat
 	* elfinder (2.1.657)
 		- [a11y] fix missing a11y labels in wjsearchbutton (#58389-5)
