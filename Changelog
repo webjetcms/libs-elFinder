@@ -1,4 +1,8 @@
 2026-08-06 Lubos Balat
+	* elfinder (2.1.659)
+		- add UTF-8 normalization to NFC form for file name compare (#58317-12)
+
+2026-08-06 Lubos Balat
 	* elfinder (2.1.658)
 		- fix filename check before upload with permission fbrowser_allow_diacritics (#58317-12)
 

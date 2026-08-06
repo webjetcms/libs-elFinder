@@ -6209,6 +6209,15 @@ elFinder.prototype = {
 					{
                         var name = file.name;
 
+                        // normalize NFD (macOS) to NFC so server-side names match
+                        try {
+                            if (name?.normalize) {
+                                name = name.normalize('NFC');
+                            }
+                        } catch (e) {
+                            // ignore normalization errors
+                        }
+
                         if (useInternationalToEnglish) {
                             name = WJ.fixFileName(name);
                             name = WJ.removeSpojky(name);

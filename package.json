@@ -1,7 +1,7 @@
 {
   "name": "@webjetcms/elfinder",
   "description": "File manager for web",
-  "version": "2.1.658",
+  "version": "2.1.659",
 
   "files": ["dist/**"],
   "main": "dist/js/elfinder.full.js",
