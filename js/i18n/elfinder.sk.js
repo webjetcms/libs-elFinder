@@ -131,7 +131,7 @@
 			'cmdgetfile'   : 'Vybrať súbory',
 			'cmdhelp'      : 'O tomto softvéri',
 			'cmdhome'      : 'Domov',
-			'cmdinfo'      : 'Info',
+			'cmdinfo'      : 'Získať info', //WEBJET UPDATED
 			'cmdmkdir'     : 'Nový priečinok',
 			'cmdmkdirin'   : 'Do novej zložky', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : 'Nový súbor',
@@ -557,6 +557,7 @@
 			'kindPSD'         : 'Adobe Photoshop obrázok',
 			'kindXBITMAP'     : 'X bitmap obrázok',
 			'kindPXM'         : 'Pixelmator obrázok',
+			'kindWEBP'        : 'WEBP obrázok',
 			// media
 			'kindAudio'       : 'Zvukový súbor',
 			'kindAudioMPEG'   : 'MPEG zvuk',
@@ -574,8 +575,21 @@
 			'kindVideoWM'     : 'Windows Media video',
 			'kindVideoFlash'  : 'Flash video',
 			'kindVideoMKV'    : 'Matroska video',
-			'kindVideoOGG'    : 'Ogg video'
+			'kindVideoOGG'    : 'Ogg video',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Zobraziť súbor',
+            'cmdresize'    : 'Editovať',
+			'wjSearchRecursive': 'V podpriečinkoch',
+			'cmdwjeditswitch': 'Upraviť',
+			'cmdwjfilearchive': 'Manažér dokumentov',
+			'cmdwjdirprops'  : 'Nastavenie priečinka',
+			'cmdwjfileprops' : 'Nastavenie súboru',
+			'cmdwjmetadata' : 'Bezpečnostné nastavenia def',
+            'cmdwjfileupdate'  : 'Aktualizovať súbor',
+			'wjfileupdate-onlyOneFileErr': 'Pri aktualizácii súboru je možné vybrať iba jeden súbor',
+			'wjfileupdate-typeMismatch': 'Typ vybraného súboru musí byť rovnaký ako typ súboru, ktorý sa má aktualizovať a to : ',
+			'wjsearch-title' : 'Hľadať'
 		}
 	};
 }));
-

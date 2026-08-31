@@ -550,6 +550,7 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'kindPSD'         : 'Adobe Photoshop image',
 			'kindXBITMAP'     : 'X bitmap image',
 			'kindPXM'         : 'Pixelmator image',
+			'kindWEBP'        : 'WEBP image',
 			// media
 			'kindAudio'       : 'Audio media',
 			'kindAudioMPEG'   : 'MPEG audio',
@@ -567,8 +568,21 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'kindVideoWM'     : 'Windows Media movie',
 			'kindVideoFlash'  : 'Flash movie',
 			'kindVideoMKV'    : 'Matroska movie',
-			'kindVideoOGG'    : 'Ogg movie'
+			'kindVideoOGG'    : 'Ogg movie',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Show file',
+            'cmdresize'    : 'Edit',
+			'wjSearchRecursive': 'In Subfolders',
+			'cmdwjeditswitch': 'Edit',
+			'cmdwjfilearchive': 'Document manager',
+			'cmdwjdirprops'  : 'Folder properties',
+			'cmdwjfileprops' : 'File properties',
+			'cmdwjmetadata' : 'Permissions',
+			'cmdwjfileupdate'  : 'Update file',
+			'wjfileupdate-onlyOneFileErr': 'Only one file can be selected when updating a file',
+			'wjfileupdate-typeMismatch': 'The type of the selected file must be the same as the type of the file to be updated, namely: ',
+			'wjsearch-title' : 'Search'
 		}
 	};
 }
-
