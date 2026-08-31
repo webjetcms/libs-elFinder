@@ -10,7 +10,7 @@ elFinder.prototype.commands.wjfileprops = function() {
 	this.getstate = function(sel) {
 		var sel = this.files(sel);
 
-		if (sel.length == 1 && typeof sel[0].mime != "undefined" && sel[0].mime != "directory") {
+		if (sel.length == 1 && typeof sel[0].mime != "undefined" && sel[0].mime != "directory" && sel[0].write && !sel[0].locked) {
 			return 0;
 		}
 

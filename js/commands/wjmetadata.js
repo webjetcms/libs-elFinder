@@ -15,7 +15,11 @@ elFinder.prototype.commands.wjmetadata = function() {
             return result;
         }
 
-        var files = this.files(sel);
+        var files = this.files(sel),
+			cwd = this.fm.cwd();
+		if ($.grep(files, function(file) { return !file.write || file.locked; }).length || (!files.length && cwd && (!cwd.write || cwd.locked))) {
+			return result;
+		}
         if (this.isMetadataAllowed() && this.isRootFiles(files)) {
 			result = 0;
     	}
@@ -129,7 +133,7 @@ elFinder.prototype.commands.wjmetadata = function() {
 
         var self = this,
 			result = [];
-		
+
 		$.each(hashes, function(i, file) {
             if (self.isString(file)) {
 				file = self.fm.file(file);
@@ -175,7 +179,7 @@ elFinder.prototype.commands.wjmetadata = function() {
 		var fileUrl = file.url;
         fileUrl = fileUrl.replace(/\/$/, "");
         filesRoot = filesRoot.replace(/\/$/, "");
-		
+
         return fileUrl === filesRoot;
     };
 

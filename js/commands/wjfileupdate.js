@@ -10,7 +10,7 @@ elFinder.prototype.commands.wjfileupdate = function() {
 	this.getstate = function(sel) {
 		var sel = this.files(sel);
 
-		if (sel.length == 1 && typeof sel[0].mime != "undefined" && sel[0].mime != "directory") {
+		if (sel.length == 1 && typeof sel[0].mime != "undefined" && sel[0].mime != "directory" && sel[0].write && !sel[0].locked) {
 			return 0;
 		}
 
@@ -20,7 +20,7 @@ elFinder.prototype.commands.wjfileupdate = function() {
 	this.exec = function(hashes) {
 		var dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); });
 
-		if(hashes === null || hashes === undefined || hashes.length < 1) { 
+		if(hashes === null || hashes === undefined || hashes.length < 1) {
 			return dfrd.reject("Hashes are not valid.");
 		}
 
