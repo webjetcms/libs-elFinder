@@ -1,3 +1,9 @@
+2026-09-14 SebastianIvanInterway
+	* elfinder (2.1.661)
+		- improve single-file updates and file type feedback (#58766)
+		- show distinct read-only markers in file lists and navigation (#58766)
+		- omit directory and multi-selection sizes from the Info dialog (#58766)
+
 2026-08-30 Lubos Balat
 	* elfinder (2.1.660)
 		- elfinder-archiv-readonly (#298)
