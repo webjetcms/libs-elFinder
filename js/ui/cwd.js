@@ -218,6 +218,7 @@ $.fn.elfindercwd = function(fm, options) {
 			},
 			
 			permsTpl = fm.res('tpl', 'perms'),
+			readOnlyTpl = fm.res('tpl', 'readonly'),
 			
 			lockTpl = fm.res('tpl', 'lock'),
 			
@@ -283,7 +284,7 @@ $.fn.elfindercwd = function(fm, options) {
 					return f.perm? fm.formatFileMode(f.perm, 'both') : '';
 				},
 				marker : function(f) {
-					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? permsTpl : '')+(f.locked ? lockTpl : '');
+					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? (fm.options.readOnlyMarker && fm.options.readOnlyMarker(f) ? readOnlyTpl : permsTpl) : '')+(f.locked ? lockTpl : '');
 				},
 				tooltip : function(f) {
 					var title = fm.formatDate(f) + (f.size > 0 ? ' ('+fm.formatSize(f.size)+')' : ''),

@@ -327,7 +327,7 @@ elFinder.prototype.commands.upload = function() {
 		};
 		
 		dialog = $('<div class="elfinder-upload-dialog-wrapper"></div>')
-			.append(inputButton('multiple', 'selectForUpload'));
+			.append(inputButton(isFileToUpdateSet(fileToUpdate) ? '' : 'multiple', 'selectForUpload'));
 
 		if(isFileToUpdateSet(fileToUpdate) != true) {
 			if (! fm.UA.Mobile && (function(input) {
@@ -336,7 +336,7 @@ elFinder.prototype.commands.upload = function() {
 			}
 		}
 		
-		if (targetDir.dirs) {
+		if (!isFileToUpdateSet(fileToUpdate) && targetDir.dirs) {
 			
 			if (targetDir.hash === cwdHash || fm.navHash2Elm(targetDir.hash).hasClass('elfinder-subtree-loaded')) {
 				getSelector().appendTo(dialog);
@@ -467,6 +467,9 @@ function isInputValid(fm, input, fileToUpdate) {
 	if(isFileToUpdateSet(fileToUpdate) == true) {
 		//Soo its update - must be only 1 file and type must match
 		var fileList = input[0].files;
+		if(fileList.length === 0) {
+			return false;
+		}
 		if(fileList.length != 1) {
 			isInputValid = false;
 			errMsg = fm.i18n('wjfileupdate-onlyOneFileErr');
@@ -483,6 +486,7 @@ function isInputValid(fm, input, fileToUpdate) {
 			id : "customErrorDialog",
 			cnt : 0.5,
 			hideCnt: true,
+			progress: 0,
 			msg : errMsg,
 			cancel: function() {}
 		});

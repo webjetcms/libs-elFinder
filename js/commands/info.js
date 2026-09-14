@@ -88,21 +88,16 @@
 			l       = '{label}',
 			v       = '{value}',
 			reqs    = [],
-			reqDfrd = null,
 			opts    = {
 				title : fm.i18n('selectionInfo'),
 				width : 'auto',
 				close : function() {
 					$(this).elfinderdialog('destroy');
-					if (reqDfrd && reqDfrd.state() === 'pending') {
-						reqDfrd.reject();
-					}
 					$.grep(reqs, function(r) {
 						r && r.state() === 'pending' && r.reject();
 					});
 				}
 			},
-			count = [],
 			replSpinner = function(msg, name, className) {
 				dialog.find('.'+spclass+'-'+name).parent().html(msg).addClass(className || '');
 			},
@@ -142,16 +137,10 @@
 
 			tmb = fm.tmb(file);
 			
-			if (!file.read) {
-				size = msg.unknown;
-			} else if (file.mime != 'directory' || file.alias) {
-				size = fm.formatSize(file.size);
-			} else {
-				size = tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size');
-				count.push(file.hash);
+			if (file.mime !== 'directory' && !hideItems.size) {
+				size = file.read ? fm.formatSize(file.size) : msg.unknown;
+				content.push(row.replace(l, msg.size).replace(v, size));
 			}
-			
-			!hideItems.size && content.push(row.replace(l, msg.size).replace(v, size));
 			!hideItems.aleasfor && file.alias && content.push(row.replace(l, msg.aliasfor).replace(v, file.alias));
 			if (!hideItems.path) {
 				if (path = fm.path(file.hash, true)) {
@@ -294,9 +283,6 @@
 				rdcnt = $.grep(files, function(f) { return f.mime === 'directory' && (! f.phash || f.isroot)? true : false ; }).length;
 				dcnt -= rdcnt;
 				content.push(row.replace(l, msg.kind).replace(v, (rdcnt === cnt || dcnt === cnt)? msg[rdcnt? 'roots' : 'folders'] : $.map({roots: rdcnt, folders: dcnt, files: cnt - rdcnt - dcnt}, function(c, t) { return c? msg[t]+' '+c : null; }).join(', ')));
-				!hideItems.size && content.push(row.replace(l, msg.size).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size')));
-				count = $.map(files, function(f) { return f.hash; });
-				
 			}
 		}
 		
@@ -348,15 +334,6 @@
 			$('<img/>')
 				.on('load', function() { dialog.find('.elfinder-cwd-icon').addClass(tmb.className).css('background-image', "url('"+tmb.url+"')"); })
 				.attr('src', tmb.url);
-		}
-		
-		// send request to count total size
-		if (count.length) {
-			reqDfrd = fm.getSize(count).done(function(data) {
-				replSpinner(data.formated, 'size');
-			}).fail(function() {
-				replSpinner(msg.unknown, 'size');
-			});
 		}
 		
 		// call custom actions
