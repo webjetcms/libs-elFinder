@@ -88,16 +88,21 @@
 			l       = '{label}',
 			v       = '{value}',
 			reqs    = [],
+			reqDfrd = null,
 			opts    = {
 				title : fm.i18n('selectionInfo'),
 				width : 'auto',
 				close : function() {
 					$(this).elfinderdialog('destroy');
+					if (reqDfrd && reqDfrd.state() === 'pending') {
+						reqDfrd.reject();
+					}
 					$.grep(reqs, function(r) {
 						r && r.state() === 'pending' && r.reject();
 					});
 				}
 			},
+			count = [],
 			replSpinner = function(msg, name, className) {
 				dialog.find('.'+spclass+'-'+name).parent().html(msg).addClass(className || '');
 			},
@@ -108,7 +113,7 @@
 			hashClass = 'elfinder-font-mono elfinder-info-hash',
 			getHashAlgorisms = [],
 			ndialog  = fm.ui.notify,
-			size, tmb, file, title, dcnt, rdcnt, path, hideItems, hashProg;
+			size, tmb, file, title, dcnt, rdcnt, path, hideItems, calculateFolderSize, hashProg;
 
 		if (ndialog.is(':hidden') && ndialog.children('.elfinder-notify').length) {
 			ndialog.elfinderdialog('open').height('auto');
@@ -124,6 +129,8 @@
 		}
 		
 		hideItems = fm.storage('infohides') || fm.arrayFlip(o.hideItems, true);
+		// Some connectors cannot provide accurate recursive folder sizes.
+		calculateFolderSize = o.calculateFolderSize === true && !hideItems.size;
 
 		if (cnt === 1) {
 			file = files[0];
@@ -137,9 +144,16 @@
 
 			tmb = fm.tmb(file);
 			
-			if (file.mime !== 'directory' && !hideItems.size) {
-				size = file.read ? fm.formatSize(file.size) : msg.unknown;
-				content.push(row.replace(l, msg.size).replace(v, size));
+			if (file.mime !== 'directory' || calculateFolderSize) {
+				if (!file.read) {
+					size = msg.unknown;
+				} else if (file.mime != 'directory' || file.alias) {
+					size = fm.formatSize(file.size);
+				} else {
+					size = tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size');
+					count.push(file.hash);
+				}
+				!hideItems.size && content.push(row.replace(l, msg.size).replace(v, size));
 			}
 			!hideItems.aleasfor && file.alias && content.push(row.replace(l, msg.aliasfor).replace(v, file.alias));
 			if (!hideItems.path) {
@@ -283,6 +297,11 @@
 				rdcnt = $.grep(files, function(f) { return f.mime === 'directory' && (! f.phash || f.isroot)? true : false ; }).length;
 				dcnt -= rdcnt;
 				content.push(row.replace(l, msg.kind).replace(v, (rdcnt === cnt || dcnt === cnt)? msg[rdcnt? 'roots' : 'folders'] : $.map({roots: rdcnt, folders: dcnt, files: cnt - rdcnt - dcnt}, function(c, t) { return c? msg[t]+' '+c : null; }).join(', ')));
+				if (calculateFolderSize) {
+					content.push(row.replace(l, msg.size).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size')));
+					count = $.map(files, function(f) { return f.hash; });
+				}
+
 			}
 		}
 		
@@ -336,6 +355,15 @@
 				.attr('src', tmb.url);
 		}
 		
+		// send request to count total size
+		if (count.length) {
+			reqDfrd = fm.getSize(count).done(function(data) {
+				replSpinner(data.formated, 'size');
+			}).fail(function() {
+				replSpinner(msg.unknown, 'size');
+			});
+		}
+
 		// call custom actions
 		if (customActions.length) {
 			$.each(customActions, function(i, action) {
