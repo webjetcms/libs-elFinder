@@ -113,52 +113,52 @@ $.fn.elfindertoolbar = function(fm, opts) {
 		}
 
 		// add contextmenu
-		if (contextRaw.length) {
-			self.on('contextmenu', function(e) {
-					e.stopPropagation();
-					e.preventDefault();
-					fm.trigger('contextmenu', {
-						raw: contextRaw,
-						x: e.pageX,
-						y: e.pageY
-					});
-				}).on('touchstart', function(e) {
-					if (e.originalEvent.touches.length > 1) {
-						return;
-					}
-					self.data('tmlongtap') && clearTimeout(self.data('tmlongtap'));
-					self.removeData('longtap')
-						.data('longtap', {x: e.originalEvent.touches[0].pageX, y: e.originalEvent.touches[0].pageY})
-						.data('tmlongtap', setTimeout(function() {
-							self.removeData('longtapTm')
-								.trigger({
-									type: 'contextmenu',
-									pageX: self.data('longtap').x,
-									pageY: self.data('longtap').y
-								})
-								.data('longtap', {longtap: true});
-						}, 500));
-				}).on('touchmove touchend', function(e) {
-					if (self.data('tmlongtap')) {
-						if (e.type === 'touchend' ||
-								( Math.abs(self.data('longtap').x - e.originalEvent.touches[0].pageX)
-								+ Math.abs(self.data('longtap').y - e.originalEvent.touches[0].pageY)) > 4)
-						clearTimeout(self.data('tmlongtap'));
-						self.removeData('longtapTm');
-					}
-				}).on('click', function(e) {
-					if (self.data('longtap') && self.data('longtap').longtap) {
-						e.stopImmediatePropagation();
-						e.preventDefault();
-					}
-				}).on('touchend click', '.elfinder-button', function(e) {
-					if (self.data('longtap') && self.data('longtap').longtap) {
-						e.stopImmediatePropagation();
-						e.preventDefault();
-					}
-				}
-			);
-		}
+		// if (contextRaw.length) {
+		// 	self.on('contextmenu', function(e) {
+		// 			e.stopPropagation();
+		// 			e.preventDefault();
+		// 			fm.trigger('contextmenu', {
+		// 				raw: contextRaw,
+		// 				x: e.pageX,
+		// 				y: e.pageY
+		// 			});
+		// 		}).on('touchstart', function(e) {
+		// 			if (e.originalEvent.touches.length > 1) {
+		// 				return;
+		// 			}
+		// 			self.data('tmlongtap') && clearTimeout(self.data('tmlongtap'));
+		// 			self.removeData('longtap')
+		// 				.data('longtap', {x: e.originalEvent.touches[0].pageX, y: e.originalEvent.touches[0].pageY})
+		// 				.data('tmlongtap', setTimeout(function() {
+		// 					self.removeData('longtapTm')
+		// 						.trigger({
+		// 							type: 'contextmenu',
+		// 							pageX: self.data('longtap').x,
+		// 							pageY: self.data('longtap').y
+		// 						})
+		// 						.data('longtap', {longtap: true});
+		// 				}, 500));
+		// 		}).on('touchmove touchend', function(e) {
+		// 			if (self.data('tmlongtap')) {
+		// 				if (e.type === 'touchend' ||
+		// 						( Math.abs(self.data('longtap').x - e.originalEvent.touches[0].pageX)
+		// 						+ Math.abs(self.data('longtap').y - e.originalEvent.touches[0].pageY)) > 4)
+		// 				clearTimeout(self.data('tmlongtap'));
+		// 				self.removeData('longtapTm');
+		// 			}
+		// 		}).on('click', function(e) {
+		// 			if (self.data('longtap') && self.data('longtap').longtap) {
+		// 				e.stopImmediatePropagation();
+		// 				e.preventDefault();
+		// 			}
+		// 		}).on('touchend click', '.elfinder-button', function(e) {
+		// 			if (self.data('longtap') && self.data('longtap').longtap) {
+		// 				e.stopImmediatePropagation();
+		// 				e.preventDefault();
+		// 			}
+		// 		}
+		// 	);
+		// }
 
 		self.prev().length && self.parent().prepend(this);
 		

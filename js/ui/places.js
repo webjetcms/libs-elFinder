@@ -17,6 +17,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 			dropover  = fm.res(c, 'adroppable'),
 			tpl       = fm.res('tpl', 'placedir'),
 			ptpl      = fm.res('tpl', 'perms'),
+			rtpl      = fm.res('tpl', 'readonly'),
 			spinner   = $(fm.res('tpl', 'navspinner')),
 			suffix    = opts.suffix? opts.suffix : '',
 			key       = 'places' + suffix,
@@ -137,7 +138,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 				return $(tpl.replace(/\{id\}/, hash2id(dir? dir.hash : hash))
 						.replace(/\{name\}/, fm.escape(dir? dir.i18 || dir.name : hash))
 						.replace(/\{cssclass\}/, dir? (fm.perms2class(dir) + (dir.notfound? ' elfinder-na' : '') + (dir.csscls? ' '+dir.csscls : '')) : '')
-						.replace(/\{permissions\}/, (dir && (!dir.read || !dir.write || dir.notfound))? ptpl : '')
+						.replace(/\{permissions\}/, dir && (!dir.read || !dir.write || dir.notfound) ? (fm.options.readOnlyMarker && fm.options.readOnlyMarker(dir) ? rtpl : ptpl) : '')
 						.replace(/\{title\}/, dir? (' title="' + fm.escape(fm.path(dir.hash, true) || dir.i18 || dir.name) + '"') : '')
 						.replace(/\{symlink\}/, '')
 						.replace(/\{style\}/, (dir && dir.icon)? fm.getIconStyle(dir) : ''));
