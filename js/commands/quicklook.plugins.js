@@ -1253,12 +1253,12 @@ elFinder.prototype.commands.quicklook.plugins = [
 										});
 									} else if (file.mime === 'application/zip') {
 										wk.postMessage({
-											scripts: [fm.options.cdns.zlibUnzip, fm.getWorkerUrl('quicklook.unzip.js')],
+											scripts: [new URL(fm.options.cdns.zlibUnzip, fm.convAbsUrl(fm.baseUrl)).href, fm.getWorkerUrl('quicklook.unzip.js')],
 											data: { type: 'zip', bin: data }
 										});
 									} else if (file.mime === 'application/x-gzip') {
 										wk.postMessage({
-											scripts: [fm.options.cdns.zlibGunzip, fm.getWorkerUrl('quicklook.unzip.js')],
+											scripts: [new URL(fm.options.cdns.zlibGunzip, fm.convAbsUrl(fm.baseUrl)).href, fm.getWorkerUrl('quicklook.unzip.js')],
 											data: { type: 'gzip', bin: data }
 										});
 
@@ -1808,6 +1808,7 @@ elFinder.prototype.commands.quicklook.plugins = [
 			},
 			prettify = function(node) {
 				if (fm.options.cdns.prettify) {
+					var url = new URL(fm.options.cdns.prettify, fm.convAbsUrl(fm.baseUrl)).href;
 					prettify = function(node) {
 						setTimeout(function() {
 							PRcheck(node);
@@ -1817,7 +1818,7 @@ elFinder.prototype.commands.quicklook.plugins = [
 					if (window.PR) {
 						_PR = window.PR;
 					}
-					fm.loadScript([fm.options.cdns.prettify + (fm.options.cdns.prettify.match(/\?/)? '&' : '?') + 'autorun=false'], function(wPR) {
+					fm.loadScript([url + (url.match(/\?/)? '&' : '?') + 'autorun=false'], function(wPR) {
 						PR = wPR || window.PR;
 						if (typeof PR === 'object') {
 							prettify = function() { return true; };

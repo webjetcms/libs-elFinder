@@ -122,6 +122,28 @@ Installation
 ### Installer
  - [Setup elFinder 2.1.x nightly with Composer](https://github.com/Studio-42/elFinder/tree/gh-pages/tools/installer/setup_with_composer)
 
+### Bundled hash and preview libraries
+
+This fork bundles SparkMD5 3.0.2 and jsSHA 3.3.1 in `js/worker/`, including
+their license notices. File information hashes use these local copies by default.
+`npm run build` copies them into `dist/js/worker/` for the npm package; deploy
+these files alongside `calcfilehash.js`.
+
+The `cdns.sparkmd5` and `cdns.jssha` options remain configurable. Relative paths
+are resolved against elFinder's `baseUrl`; absolute URLs can also be supplied.
+Set either option to an empty string to disable its hash algorithms.
+
+Text and ZIP/GZIP previews also use local libraries: Google Code Prettify from
+commit `e006587b4a893f0281e9dc9a53001c7ed584d4e7` and zlib.js 0.3.1. Their scripts
+and license notices are in `js/worker/`, so the existing CMS deployment copies
+them with the workers. Prettify runs in the page, using its standalone core
+instead of the upstream loader that fetches additional CDN assets. Its scoped
+styles in `css/prettify.css` are included in `elfinder.full.css` and
+`elfinder.min.css` by the build.
+
+The `cdns.prettify`, `cdns.zlibUnzip`, and `cdns.zlibGunzip` options also resolve
+relative paths against `baseUrl` and continue to accept absolute URL overrides.
+
 Downloads
 ------------
 **Stable releases** ([Changelog](https://github.com/Studio-42/elFinder/blob/master/Changelog))

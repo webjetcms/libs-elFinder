@@ -4374,7 +4374,8 @@ var elFinder = function(elm, opts, bootCallback) {
 									job.reject();
 								};
 								wk.postMessage({
-									scripts: [self.options.cdns.sparkmd5, self.getWorkerUrl('calcfilehash.js')],
+									// Blob workers need absolute URLs for bundled libraries.
+									scripts: [new URL(self.options.cdns.sparkmd5, self.convAbsUrl(self.baseUrl)).href, self.getWorkerUrl('calcfilehash.js')],
 									data: { type: 'md5', bin: arrayBuffer }
 								});
 								dfd.fail(function() {
@@ -4415,7 +4416,7 @@ var elFinder = function(elm, opts, bootCallback) {
 											job.reject();
 										};
 										wk.postMessage({
-											scripts: [self.options.cdns.jssha, self.getWorkerUrl('calcfilehash.js')],
+											scripts: [new URL(self.options.cdns.jssha, self.convAbsUrl(self.baseUrl)).href, self.getWorkerUrl('calcfilehash.js')],
 											data: { type: v, bin: arrayBuffer, hashOpts: opts }
 										});
 										dfd.fail(function() {
