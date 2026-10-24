@@ -33,6 +33,7 @@ elFinder.prototype.resources = {
 	},
 	tpl : {
 		perms      : '<span class="elfinder-perms"></span>',
+		readonly   : '<span class="elfinder-read-only"></span>',
 		lock       : '<span class="elfinder-lock"></span>',
 		symlink    : '<span class="elfinder-symlink"></span>',
 		navicon    : '<span class="elfinder-nav-icon"></span>',
