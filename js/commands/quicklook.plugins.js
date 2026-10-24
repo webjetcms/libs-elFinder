@@ -7,7 +7,7 @@ elFinder.prototype.commands.quicklook.plugins = [
 	 **/
 	function(ql) {
 		"use strict";
-		var mimes   = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/x-ms-bmp', 'image/webp'],
+		var mimes   = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/x-ms-bmp', 'image/webp', 'image/avif'],
 			getDimSize = ql.fm.returnBytes((ql.options.getDimThreshold || 0)),
 			preview = ql.preview,
 			WebP, flipMime;

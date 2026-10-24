@@ -6003,6 +6003,7 @@ elFinder.prototype = {
 			'image/xbm'                     : 'XBITMAP',
 			'image/pxm'                     : 'PXM',
 			'image/webp'                    : 'WEBP',
+			'image/avif'                    : 'AVIF',
 			'audio/mpeg'                    : 'AudioMPEG',
 			'audio/midi'                    : 'AudioMIDI',
 			'audio/ogg'                     : 'AudioOGG',

@@ -1,3 +1,7 @@
+2026-10-24 Lubos Balat
+	* elfinder (2.1.663)
+		- support for AVIF image format
+
 2026-10-09 SebastianIvanInterway
 	* elfinder (2.1.662)
 		- bundle SparkMD5, jsSHA, Prettify and ZIP/GZIP libraries for local loading by default
