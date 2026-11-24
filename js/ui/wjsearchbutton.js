@@ -31,7 +31,7 @@ $.fn.elfinderwjsearchbutton = function(cmd) {
 			},
 			search = function() {
 				input.data('inctm') && clearTimeout(input.data('inctm'));
-				var val = $.trim(input.val()),
+				var val = input.val().trim(),
 					from = !$('#' + id('SearchFromAll')).prop('checked'),
 					mime = $('#' + id('SearchMime')).prop('checked'),
 					type = '';
@@ -238,7 +238,7 @@ $.fn.elfinderwjsearchbutton = function(cmd) {
 							typeSet.append($('<input id="'+id(i)+'" name="serchcol" type="radio" value="'+fm.escape(i)+'"/><label for="'+id(i)+'">'+fm.i18n(v.name)+'</label>'));
 						});
 					}
-					opts.find('div.buttonset').buttonset();
+					opts.find('div.buttonset').controlgroup();
 					$('#'+id('SearchFromAll')).next('label').attr('title', fm.i18n('searchTarget', fm.i18n('btnAll')));
 					if (sTypes) {
 						$.each(sTypes, function(i, v) {
@@ -253,7 +253,7 @@ $.fn.elfinderwjsearchbutton = function(cmd) {
 						})
 						.on('click', 'input', function(e) {
 							e.stopPropagation();
-							$.trim(input.val())? search() : input.trigger('focus');
+							input.val().trim()? search() : input.trigger('focus');
 						})
 						.on('close', function() {
 							input.trigger('blur');

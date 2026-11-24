@@ -6,7 +6,8 @@
   "files": ["dist/**"],
   "main": "dist/js/elfinder.full.js",
   "scripts": {
-    "build": "mkdir -p ./dist && jake -C ./dist elfinder --trace"
+    "build": "mkdir -p ./dist && jake -C ./dist elfinder --trace",
+    "build-minimal": "mkdir -p ./build && jake -C ./build elfinder-minimal"
   },
   "repository": {
     "type": "git",
