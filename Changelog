@@ -1,3 +1,15 @@
+2026-11-25 SebastianIvanInterway
+	* elfinder (2.1.664)
+		- calculate folder sizes through the WebJET connector with progress, retry and cancellation
+		- improve Quick Look title-bar controls, keyboard accessibility and navigation states
+		- add keyboard-accessible breadcrumbs and an option to keep them above the work zone
+		- include the current root in the breadcrumb root selector
+		- add optional extension-preserving icon captions and preserve them after cancelled renames
+		- improve drag selection responsiveness and prevent unintended clicks after selection
+		- open WebJET pages in the current page editor and hide image-editor popup resize controls
+		- add Czech, German, English and Slovak labels for WebJET file-browser features
+		- fix hash-information row styling
+
 2026-10-24 Lubos Balat
 	* elfinder (2.1.663)
 		- support for AVIF image format
