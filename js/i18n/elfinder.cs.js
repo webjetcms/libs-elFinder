@@ -131,7 +131,7 @@
 			'cmdgetfile'   : 'Vybrat soubory',
 			'cmdhelp'      : 'O softwaru',
 			'cmdhome'      : 'Domů',
-			'cmdinfo'      : 'Zobrazit informace',
+			'cmdinfo'      : 'Získat info', //WEBJET UPDATED
 			'cmdmkdir'     : 'Nová složka',
 			'cmdmkdirin'   : 'Do nové složky', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : 'Nový soubor',
@@ -564,8 +564,9 @@
 			'kindPSD'         : 'Obrázek Adobe Photoshop',
 			'kindXBITMAP'     : 'Obrázek X bitmapa',
 			'kindPXM'         : 'Obrázek Pixelmator',
+			'kindWEBP'        : 'WEBP obrázek',
 			// media
-			'kindAudio'       : 'Audio sobory',
+			'kindAudio'       : 'Audio soubory',
 			'kindAudioMPEG'   : 'MPEG audio',
 			'kindAudioMPEG4'  : 'MPEG-4 audio',
 			'kindAudioMIDI'   : 'MIDI audio',
@@ -581,8 +582,34 @@
 			'kindVideoWM'     : 'Windows Media video',
 			'kindVideoFlash'  : 'Flash video',
 			'kindVideoMKV'    : 'Matroska video',
-			'kindVideoOGG'    : 'Ogg video'
+			'kindVideoOGG'    : 'Ogg video',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Zobrazit soubor',
+            'cmdresize'    : 'Editovat',
+			'wjFolderSizeCalculating': 'Počítám velikost…',
+			'wjFolderSizeProgress': 'Zatím $1 · zkontrolované složky: $2',
+			'wjFolderSizeFailed': 'Velikost složky se nepodařilo vypočítat.',
+			'wjFolderSizeRetry': 'Zkusit znovu',
+			'wjCopyPath': 'Kopírovat cestu',
+			'wjCopyLink': 'Kopírovat odkaz',
+			'wjCopied': 'Zkopírováno',
+			'wjCopyFailed': 'Kopírování se nezdařilo. Označte a zkopírujte text ručně.',
+			'wjTechnicalDetails': 'Technické údaje',
+			'wjEmptyFolderUploadHint': 'Přetáhněte sem soubory nebo je nahrajte.',
+			'wjSearchFolder': 'Hledat ve složce…',
+			'wjSearchNoFiles': 'Nebyly nalezeny žádné soubory.',
+			'wjSearchClear': 'Zrušit vyhledávání',
+			'wjSearchSubfolders': 'Hledat i v podsložkách',
+			'wjSearchRecursive': 'V podadresářích',
+			'cmdwjeditswitch': 'Upravit',
+			'cmdwjdirprops'  : 'Nastavení složky',
+			'cmdwjfileprops' : 'Nastavení souboru',
+			'cmdwjmetadata' : 'Bezpečnostní nastavení',
+			'cmdwjfileupdate'  : 'Aktualizovat soubor',
+			'wjfileupdate-onlyOneFileErr': 'Při aktualizaci souboru lze vybrat pouze jeden soubor',
+			'wjfileupdate-typeMismatch': 'Nesprávný typ souboru. Vyberte soubor typu ',
+			'wjsearch-title' : 'Hledat'
 		}
 	};
 }));
-

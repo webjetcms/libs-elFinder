@@ -131,7 +131,7 @@
 			'cmdgetfile'   : 'Vybrať súbory',
 			'cmdhelp'      : 'O tomto softvéri',
 			'cmdhome'      : 'Domov',
-			'cmdinfo'      : 'Info',
+			'cmdinfo'      : 'Získať info', //WEBJET UPDATED
 			'cmdmkdir'     : 'Nový priečinok',
 			'cmdmkdirin'   : 'Do novej zložky', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : 'Nový súbor',
@@ -564,6 +564,7 @@
 			'kindPSD'         : 'Adobe Photoshop obrázok',
 			'kindXBITMAP'     : 'X bitmap obrázok',
 			'kindPXM'         : 'Pixelmator obrázok',
+			'kindWEBP'        : 'WEBP obrázok',
 			// media
 			'kindAudio'       : 'Zvukový súbor',
 			'kindAudioMPEG'   : 'MPEG zvuk',
@@ -581,8 +582,34 @@
 			'kindVideoWM'     : 'Windows Media video',
 			'kindVideoFlash'  : 'Flash video',
 			'kindVideoMKV'    : 'Matroska video',
-			'kindVideoOGG'    : 'Ogg video'
+			'kindVideoOGG'    : 'Ogg video',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Zobraziť súbor',
+            'cmdresize'    : 'Editovať',
+			'wjFolderSizeCalculating': 'Počítam veľkosť…',
+			'wjFolderSizeProgress': 'Zatiaľ $1 · skontrolované priečinky: $2',
+			'wjFolderSizeFailed': 'Veľkosť sa nepodarilo vypočítať.',
+			'wjFolderSizeRetry': 'Skúsiť znova',
+			'wjCopyPath': 'Kopírovať cestu',
+			'wjCopyLink': 'Kopírovať odkaz',
+			'wjCopied': 'Skopírované',
+			'wjCopyFailed': 'Kopírovanie sa nepodarilo. Označte a skopírujte text ručne.',
+			'wjTechnicalDetails': 'Technické údaje',
+			'wjEmptyFolderUploadHint': 'Presuňte sem súbory alebo ich nahrajte.',
+			'wjSearchFolder': 'Hľadať v priečinku…',
+			'wjSearchNoFiles': 'Nenašli sa žiadne súbory.',
+			'wjSearchClear': 'Zrušiť vyhľadávanie',
+			'wjSearchSubfolders': 'Hľadať aj v podpriečinkoch',
+			'wjSearchRecursive': 'V podpriečinkoch',
+			'cmdwjeditswitch': 'Upraviť',
+			'cmdwjdirprops'  : 'Nastavenie priečinka',
+			'cmdwjfileprops' : 'Nastavenie súboru',
+			'cmdwjmetadata' : 'Bezpečnostné nastavenia def',
+            'cmdwjfileupdate'  : 'Aktualizovať súbor',
+			'wjfileupdate-onlyOneFileErr': 'Pri aktualizácii súboru je možné vybrať iba jeden súbor',
+			'wjfileupdate-typeMismatch': 'Nesprávny typ súboru. Vyberte súbor typu ',
+			'wjsearch-title' : 'Hľadať'
 		}
 	};
 }));
-

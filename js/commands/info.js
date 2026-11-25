@@ -72,6 +72,79 @@
 		return 0;
 	};
 	
+	// A WebJET connector advertises this field only for file-backed folders.
+	function showFolderSize(file, cell) {
+		var timer, scanId, closed = false,
+			progress = $('<span>').appendTo(cell),
+			status = $('<span role="status">').appendTo(cell),
+			number = new Intl.NumberFormat(fm.lang, {maximumFractionDigits: 2}),
+			units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+
+		function formatBytes(bytes) {
+			var size = Number(bytes), unit = 0;
+			while (size >= 1024 && unit < units.length - 1) {
+				size /= 1024;
+				unit++;
+			}
+			return number.format(size) + ' ' + units[unit];
+		}
+
+		function request(action, args) {
+			return fm.request({
+				data: Object.assign({cmd: 'foldersize', action: action}, args),
+				type: 'post', preventDefault: true, notify: null
+			});
+		}
+
+		function cancel() {
+			clearTimeout(timer);
+			if (scanId) {
+				request('cancel', {scanId: scanId});
+				scanId = null;
+			}
+		}
+
+		function failed() {
+			if (closed) return;
+			cancel();
+			progress.empty();
+			status.text(fm.i18n('wjFolderSizeFailed'));
+			$('<button type="button" class="elfinder-folder-size-retry">').text(fm.i18n('wjFolderSizeRetry'))
+				.one('click', function() { $(this).remove(); start(); }).appendTo(cell);
+		}
+
+		function update(data) {
+			scanId = data.scanId;
+			if (closed) {
+				cancel();
+				return;
+			}
+			if (data.state === 'complete') {
+				scanId = null;
+				progress.empty();
+				status.text(formatBytes(data.bytes)).attr('title', data.bytes + ' B');
+			} else if (data.state === 'running' && scanId) {
+				if (data.folders || data.bytes !== '0') {
+					status.empty();
+					progress.text(fm.i18n(false, 'wjFolderSizeProgress', formatBytes(data.bytes), number.format(data.folders)));
+				}
+				timer = setTimeout(function() {
+					request('status', {scanId: scanId}).done(update).fail(failed);
+				}, 1000);
+			} else {
+				failed();
+			}
+		}
+
+		function start() {
+			status.text(fm.i18n('wjFolderSizeCalculating'));
+			request('start', {target: file.hash}).done(update).fail(failed);
+		}
+
+		start();
+		return function() { closed = true; cancel(); };
+	}
+
 	this.exec = function(hashes) {
 		var files   = this.files(hashes);
 		if (! files.length) {
@@ -89,10 +162,12 @@
 			v       = '{value}',
 			reqs    = [],
 			reqDfrd = null,
+			stopFolderSize,
 			opts    = {
 				title : fm.i18n('selectionInfo'),
 				width : 'auto',
 				close : function() {
+					if (stopFolderSize) stopFolderSize();
 					$(this).elfinderdialog('destroy');
 					if (reqDfrd && reqDfrd.state() === 'pending') {
 						reqDfrd.reject();
@@ -113,7 +188,7 @@
 			hashClass = 'elfinder-font-mono elfinder-info-hash',
 			getHashAlgorisms = [],
 			ndialog  = fm.ui.notify,
-			size, tmb, file, title, dcnt, rdcnt, path, hideItems, hashProg;
+			size, tmb, file, title, dcnt, rdcnt, path, hideItems, calculateFolderSize, hashProg;
 
 		if (ndialog.is(':hidden') && ndialog.children('.elfinder-notify').length) {
 			ndialog.elfinderdialog('open').height('auto');
@@ -129,6 +204,8 @@
 		}
 		
 		hideItems = fm.storage('infohides') || fm.arrayFlip(o.hideItems, true);
+		// Some connectors cannot provide accurate recursive folder sizes.
+		calculateFolderSize = o.calculateFolderSize === true && !hideItems.size;
 
 		if (cnt === 1) {
 			file = files[0];
@@ -142,16 +219,19 @@
 
 			tmb = fm.tmb(file);
 			
-			if (!file.read) {
-				size = msg.unknown;
-			} else if (file.mime != 'directory' || file.alias) {
-				size = fm.formatSize(file.size);
-			} else {
-				size = tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size');
-				count.push(file.hash);
+			if (file.wjFolderSize && file.mime === 'directory' && file.read && !file.alias && !hideItems.size) {
+				content.push(row.replace(l, msg.size).replace(v, '').replace('{class}', 'elfinder-folder-size'));
+			} else if (file.mime !== 'directory' || calculateFolderSize) {
+				if (!file.read) {
+					size = msg.unknown;
+				} else if (file.mime != 'directory' || file.alias) {
+					size = fm.formatSize(file.size);
+				} else {
+					size = tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size');
+					count.push(file.hash);
+				}
+				!hideItems.size && content.push(row.replace(l, msg.size).replace(v, size));
 			}
-			
-			!hideItems.size && content.push(row.replace(l, msg.size).replace(v, size));
 			!hideItems.aleasfor && file.alias && content.push(row.replace(l, msg.aliasfor).replace(v, file.alias));
 			if (!hideItems.path) {
 				if (path = fm.path(file.hash, true)) {
@@ -229,7 +309,7 @@
 				getHashAlgorisms = [];
 				$.each(fm.storage('hashchekcer') || o.showHashAlgorisms, function(i, n) {
 					if (!file[n]) {
-						content.push(row.replace(l, fm.i18n(n)).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', n)));
+						content.push(row.replace(l, fm.i18n(n)).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', n)).replace('{class}', hashClass));
 						getHashAlgorisms.push(n);
 					} else {
 						content.push(row.replace(l, fm.i18n(n)).replace(v, file[n]).replace('{class}', hashClass));
@@ -294,9 +374,11 @@
 				rdcnt = $.grep(files, function(f) { return f.mime === 'directory' && (! f.phash || f.isroot)? true : false ; }).length;
 				dcnt -= rdcnt;
 				content.push(row.replace(l, msg.kind).replace(v, (rdcnt === cnt || dcnt === cnt)? msg[rdcnt? 'roots' : 'folders'] : $.map({roots: rdcnt, folders: dcnt, files: cnt - rdcnt - dcnt}, function(c, t) { return c? msg[t]+' '+c : null; }).join(', ')));
-				!hideItems.size && content.push(row.replace(l, msg.size).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size')));
-				count = $.map(files, function(f) { return f.hash; });
-				
+				if (calculateFolderSize) {
+					content.push(row.replace(l, msg.size).replace(v, tpl.spinner.replace('{text}', msg.calc).replace('{name}', 'size')));
+					count = $.map(files, function(f) { return f.hash; });
+				}
+
 			}
 		}
 		
@@ -350,6 +432,9 @@
 				.attr('src', tmb.url);
 		}
 		
+		var folderSizeCell = dialog.find('.elfinder-folder-size');
+		if (folderSizeCell.length) stopFolderSize = showFolderSize(file, folderSizeCell);
+
 		// send request to count total size
 		if (count.length) {
 			reqDfrd = fm.getSize(count).done(function(data) {
@@ -358,7 +443,7 @@
 				replSpinner(msg.unknown, 'size');
 			});
 		}
-		
+
 		// call custom actions
 		if (customActions.length) {
 			$.each(customActions, function(i, action) {

@@ -367,6 +367,7 @@ $.fn.elfindertree = function(fm, opts) {
 			 * @type String
 			 */
 			ptpl = fm.res('tpl', 'perms'),
+			rtpl = fm.res('tpl', 'readonly'),
 			
 			/**
 			 * Lock marker html template
@@ -424,7 +425,7 @@ $.fn.elfindertree = function(fm, opts) {
 						return '';
 					}
 				},
-				permissions : function(dir) { return !dir.read || !dir.write ? ptpl : ''; },
+				permissions : function(dir) { return !dir.read || !dir.write ? (fm.options.readOnlyMarker && fm.options.readOnlyMarker(dir) ? rtpl : ptpl) : ''; },
 				symlink     : function(dir) { return dir.alias ? stpl : ''; },
 				style       : function(dir) { return dir.icon ? fm.getIconStyle(dir) : ''; }
 			},

@@ -577,8 +577,34 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'kindVideoWM'     : 'Windows Media movie',
 			'kindVideoFlash'  : 'Flash movie',
 			'kindVideoMKV'    : 'Matroska movie',
-			'kindVideoOGG'    : 'Ogg movie'
+			'kindVideoOGG'    : 'Ogg movie',
+
+			/************* WEBJET ******************/
+			'cmdwjfileopen' : 'Show file',
+            'cmdresize'    : 'Edit',
+			'wjFolderSizeCalculating': 'Calculating size…',
+			'wjFolderSizeProgress': 'Counted $1 · folders checked: $2',
+			'wjFolderSizeFailed': 'Could not calculate the folder size.',
+			'wjFolderSizeRetry': 'Try again',
+			'wjCopyPath': 'Copy path',
+			'wjCopyLink': 'Copy link',
+			'wjCopied': 'Copied',
+			'wjCopyFailed': 'Could not copy. Select and copy the text manually.',
+			'wjTechnicalDetails': 'Technical details',
+			'wjEmptyFolderUploadHint': 'Drag files here or upload them.',
+			'wjSearchFolder': 'Search this folder…',
+			'wjSearchNoFiles': 'No files found.',
+			'wjSearchClear': 'Clear search',
+			'wjSearchSubfolders': 'Search subfolders too',
+			'wjSearchRecursive': 'In Subfolders',
+			'cmdwjeditswitch': 'Edit',
+			'cmdwjdirprops'  : 'Folder properties',
+			'cmdwjfileprops' : 'File properties',
+			'cmdwjmetadata' : 'Permissions',
+			'cmdwjfileupdate'  : 'Update file',
+			'wjfileupdate-onlyOneFileErr': 'Only one file can be selected when updating a file',
+			'wjfileupdate-typeMismatch': 'Wrong file type. Select a file of type ',
+			'wjsearch-title' : 'Search'
 		}
 	};
 }
-

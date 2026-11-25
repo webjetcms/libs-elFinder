@@ -10,6 +10,7 @@ _*
 build
 connector-svn.php
 connector.php
+dist
 elFinderVolumeSVN.class.php
 extensions
 files2

@@ -13,7 +13,7 @@ $.fn.elfindercontextmenu = function(fm) {
 			cHover = fm.res('class', 'hover'),
 			dragOpt = {
 				distance: 8,
-				start: function() {
+				start: function(e) {
 					menu.data('drag', true).data('touching') && menu.find('.'+cHover).removeClass(cHover);
 				},
 				stop: function() {

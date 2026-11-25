@@ -261,6 +261,11 @@ elFinder.prototype.commands.rename = function() {
 		if (!cnt) {
 			return -1;
 		}
+
+		//In "eyes" of elFinder it's not locked but IF write = 0 -> it's locked
+		if(sel[0].write === 0) {
+			return -1;
+		}
 		
 		if (cnt > 1 && sel[0].phash) {
 			phash = sel[0].phash;
@@ -345,12 +350,9 @@ elFinder.prototype.commands.rename = function() {
 			dfrd     = $.Deferred()
 				.fail(function(error) {
 					var parent = input.parent(),
-						name   = fm.escape(file.i18 || file.name);
+						name   = fm.formatFileName(file, tarea);
 
 					input.off();
-					if (tarea) {
-						name = name.replace(/([_.])/g, '&#8203;$1');
-					}
 					requestAnimationFrame(function() {
 						if (navbar) {
 							input.replaceWith(name);
@@ -561,7 +563,10 @@ elFinder.prototype.commands.rename = function() {
 		var sel = (e.data? (e.data.selected || e.data.targets) : null) || fm.selected(),
 			file;
 		if (sel && sel.length === 1 && (file = fm.file(sel[0])) && fm.isRoot(file)) {
-			self.title = fm.i18n('kindAlias') + ' (' + fm.i18n('preference') + ')';
+			//self.title = fm.i18n('kindAlias') + ' (' + fm.i18n('preference') + ')';
+			
+			//FIX name, replace "Alias (Preference)" text with basic key 'cmdrename'
+			self.title = fm.i18n('cmdrename');
 		} else {
 			self.title = fm.i18n('cmdrename');
 		}

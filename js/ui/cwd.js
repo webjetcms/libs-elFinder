@@ -218,6 +218,7 @@ $.fn.elfindercwd = function(fm, options) {
 			},
 			
 			permsTpl = fm.res('tpl', 'perms'),
+			readOnlyTpl = fm.res('tpl', 'readonly'),
 			
 			lockTpl = fm.res('tpl', 'lock'),
 			
@@ -233,9 +234,7 @@ $.fn.elfindercwd = function(fm, options) {
 					return fm.cwdHash2Id(f.hash);
 				},
 				name : function(f) {
-					var name = fm.escape(f.i18 || f.name);
-					!list && (name = name.replace(/([_.])/g, '&#8203;$1'));
-					return name;
+					return fm.formatFileName(f, !list);
 				},
 				nametitle : function(f) {
 					return fm.escape(f.i18 || f.name);
@@ -283,7 +282,7 @@ $.fn.elfindercwd = function(fm, options) {
 					return f.perm? fm.formatFileMode(f.perm, 'both') : '';
 				},
 				marker : function(f) {
-					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? permsTpl : '')+(f.locked ? lockTpl : '');
+					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? (fm.options.readOnlyMarker && fm.options.readOnlyMarker(f) ? readOnlyTpl : permsTpl) : '')+(f.locked ? lockTpl : '');
 				},
 				tooltip : function(f) {
 					var title = fm.formatDate(f) + (f.size > 0 ? ' ('+fm.formatSize(f.size)+')' : ''),
@@ -661,7 +660,8 @@ $.fn.elfindercwd = function(fm, options) {
 				disabled   : true,
 				filter     : '[id]:first',
 				stop       : trigger,
-				delay      : 250,
+				delay      : 0,
+				distance   : 3,
 				appendTo   : 'body',
 				autoRefresh: false,
 				selected   : function(e, ui) { $(ui.selected).trigger(evtSelect); },
@@ -1792,6 +1792,8 @@ $.fn.elfindercwd = function(fm, options) {
 				.attr('unselectable', 'on')
 				// fix ui.selectable bugs and add shift+click support 
 				.on('click.'+fm.namespace, fileSelector, function(e) {
+					// The selectable click guard is bound after elFinder's own handlers.
+					if ($.data(e.target, 'selectable.preventClickEvent')) { return; }
 					var p    = this.id ? $(this) : $(this).parents('[id]:first'),
 						tgt  = $(e.target),
 						prev,
@@ -2171,6 +2173,7 @@ $.fn.elfindercwd = function(fm, options) {
 				})
 				// unselect all on cwd click
 				.on('click.'+fm.namespace, function(e) {
+					if ($.data(e.target, 'selectable.preventClickEvent')) { return; }
 					if (e.target === this && ! cwd.data('longtap')) {
 						!e.shiftKey && !e.ctrlKey && !e.metaKey && unselectAll();
 					}
