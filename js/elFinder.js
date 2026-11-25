@@ -10664,6 +10664,27 @@ elFinder.prototype = {
 	},
 
 	/**
+	 * Build an escaped file caption, optionally separating its extension for icon views.
+	 *
+	 * @param {Object} file File metadata with name, optional i18n label, and MIME type.
+	 * @param {Boolean} icons Whether the caption belongs to the icon view.
+	 * @return {String} HTML for the caption; the underlying file name is unchanged.
+	 */
+	formatFileName : function(file, icons) {
+		var name = file.i18 || file.name,
+			parts;
+		if (icons && this.options.uiOptions.cwd.iconsView.preserveExtension && file.mime !== 'directory') {
+			parts = this.splitFileExtention(name);
+			if (parts[0] && parts[1]) {
+				return '<span class="elfinder-cwd-filename-base">' + this.escape(parts[0]) + '</span>' +
+					'<span class="elfinder-cwd-filename-extension">.' + this.escape(parts[1]) + '</span>';
+			}
+		}
+		name = this.escape(name);
+		return icons? name.replace(/([_.])/g, '&#8203;$1') : name;
+	},
+
+	/**
 	 * Return array ["name without extention", "extention"]
 	 *
 	 * @param String name

@@ -350,12 +350,9 @@ elFinder.prototype.commands.rename = function() {
 			dfrd     = $.Deferred()
 				.fail(function(error) {
 					var parent = input.parent(),
-						name   = fm.escape(file.i18 || file.name);
+						name   = fm.formatFileName(file, tarea);
 
 					input.off();
-					if (tarea) {
-						name = name.replace(/([_.])/g, '&#8203;$1');
-					}
 					requestAnimationFrame(function() {
 						if (navbar) {
 							input.replaceWith(name);

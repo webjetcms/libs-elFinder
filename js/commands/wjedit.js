@@ -252,7 +252,7 @@ elFinder.prototype.commands.wjedit = function() {
 
 			if (hash.indexOf("iwcm_doc_") === 0 && file.url.indexOf(":") > -1) {
 				var docId = file.url.substring(file.url.indexOf(":") + 1);
-                WJ.popup("/admin/editor.do?docid=" + docId + "&isPopup=true")
+				window.open("/admin/v9/webpages/web-pages-list/?docid=" + docId, "_blank");
 				return;
 			}
 

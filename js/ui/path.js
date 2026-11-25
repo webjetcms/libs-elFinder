@@ -16,7 +16,7 @@ $.fn.elfinderpath = function(fm, options) {
 			prefix = 'path' + (elFinder.prototype.uniqueid? elFinder.prototype.uniqueid : '') + '-',
 			wzbase = $('<div class="ui-widget-header ui-helper-clearfix elfinder-workzone-path"></div>'),
 			path   = $(this).addClass('elfinder-path').html('&nbsp;')
-				.on('mousedown', 'span.elfinder-path-dir', function(e) {
+				.on('click', 'span.elfinder-path-dir', function(e) {
 					var hash = $(this).attr('id').substr(prefix.length);
 					e.preventDefault();
 					if (hash != fm.cwd().hash) {
@@ -28,6 +28,13 @@ $.fn.elfinderpath = function(fm, options) {
 						}
 					}
 				})
+				.on('keydown', 'span.elfinder-path-dir', function(e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						e.stopPropagation();
+						$(this).trigger('click');
+					}
+				})
 				.prependTo(fm.getUI('statusbar').show()),
 			roots = $('<div class="elfinder-path-roots"></div>').on('click', function(e) {
 				e.stopPropagation();
@@ -37,7 +44,7 @@ $.fn.elfinderpath = function(fm, options) {
 				raw = [];
 
 				$.each(roots, function(i, f) {
-					if (! f.phash && fm.root(fm.cwd().hash, true) !== f.hash) {
+					if (! f.phash) {
 						raw.push({
 							label    : fm.escape(f.i18 || f.name),
 							icon     : 'home',
@@ -63,7 +70,7 @@ $.fn.elfinderpath = function(fm, options) {
 						f = fm.file(hash),
 						name = fm.escape(f.i18 || f.name);
 					names.push(name);
-					dirs.push('<span id="'+prefix+hash+'" class="'+c+'" title="'+names.join(fm.option('separator'))+'">'+name+'</span>');
+					dirs.push('<span role="button" tabindex="0"'+(cwd === hash? ' aria-current="location"' : '')+' id="'+prefix+hash+'" class="'+c+'" title="'+names.join(fm.option('separator'))+'">'+name+'</span>');
 				});
 				return dirs.join('<span class="elfinder-path-other">'+fm.option('separator')+'</span>');
 			},
@@ -119,7 +126,7 @@ $.fn.elfinderpath = function(fm, options) {
 		fm.one('init', function() {
 			hasUiTree = fm.getUI('tree').length;
 			hasUiStat = fm.getUI('stat').length;
-			if (! hasUiTree && options.toWorkzoneWithoutNavbar) {
+			if (options.toWorkzone || (! hasUiTree && options.toWorkzoneWithoutNavbar)) {
 				wzbase.append(path).insertBefore(fm.getUI('workzone'));
 				place = 'workzone';
 				fm.bind('open', toWorkzone)
@@ -166,7 +173,9 @@ $.fn.elfinderpath = function(fm, options) {
 		// on swipe to navbar show/hide
 		.bind('navbarshow navbarhide', function() {
 			var wz = fm.getUI('workzone');
-			if (this.type === 'navbarshow') {
+			if (options.toWorkzone) {
+				toWorkzone();
+			} else if (this.type === 'navbarshow') {
 				fm.unbind('open', toWorkzone);
 				path.prependTo(fm.getUI('statusbar'));
 				wzbase.detach();

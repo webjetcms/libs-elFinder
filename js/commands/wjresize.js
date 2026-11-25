@@ -48,6 +48,9 @@ elFinder.prototype.commands.resize = function() {
 					//Remove close button action from table
 					openedWindow.$("#galleryTable_modal").off();
 
+					// Keep the image editor fixed to the popup opened by elFinder.
+					openedWindow.$("#galleryTable_modal .DTE_Header .dialog-buttons button.maximize, #galleryTable_modal .DTE_Header .dialog-buttons button.minimize").hide();
+
 					//Get buttons instances
 					closeBtn = openedWindow.$("div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn-close-editor");
 					saveBtn = openedWindow.$("div.DTE_Footer.modal-footer > div.DTE_Form_Buttons > button.btn-primary");

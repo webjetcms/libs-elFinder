@@ -584,7 +584,23 @@
 			'kindVideoWM'     : 'Windows Media Film',
 			'kindVideoFlash'  : 'Flash Film',
 			'kindVideoMKV'    : 'Matroska Film',
-			'kindVideoOGG'    : 'Ogg Film'
+			'kindVideoOGG'    : 'Ogg Film',
+
+			/************* WEBJET ******************/
+			'wjFolderSizeCalculating': 'Größe wird berechnet…',
+			'wjFolderSizeProgress': 'Bisher $1 · geprüfte Ordner: $2',
+			'wjFolderSizeFailed': 'Die Ordnergröße konnte nicht berechnet werden.',
+			'wjFolderSizeRetry': 'Erneut versuchen',
+			'wjCopyPath': 'Pfad kopieren',
+			'wjCopyLink': 'Link kopieren',
+			'wjCopied': 'Kopiert',
+			'wjCopyFailed': 'Kopieren fehlgeschlagen. Markieren und kopieren Sie den Text manuell.',
+			'wjTechnicalDetails': 'Technische Details',
+			'wjEmptyFolderUploadHint': 'Ziehen Sie Dateien hierher oder laden Sie sie hoch.',
+			'wjSearchFolder': 'In diesem Ordner suchen…',
+			'wjSearchNoFiles': 'Keine Dateien gefunden.',
+			'wjSearchClear': 'Suche zurücksetzen',
+			'wjSearchSubfolders': 'Auch in Unterordnern suchen'
 		}
 	};
 }));

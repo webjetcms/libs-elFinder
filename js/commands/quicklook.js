@@ -133,8 +133,6 @@
 			return (value && value !== '' && value != 'no')? true : false;
 		},
 		
-		platformWin = (window.navigator.platform.indexOf('Win') != -1),
-		
 		/**
 		 * Opened window width (from config)
 		 *
@@ -182,8 +180,9 @@
 		icon    = $('<div></div>'),
 		info    = $('<div class="elfinder-quicklook-info"></div>'),//.hide(),
 		cover   = $('<div class="ui-front elfinder-quicklook-cover"></div>'),
-		fsicon  = $('<div class="'+navicon+' '+navicon+'-fullscreen"></div>')
-			.on('click touchstart', function(e) {
+		fsicon  = $('<button type="button" class="ui-widget-header ui-corner-all elfinder-titlebar-button elfinder-titlebar-full '+navicon+'-fullscreen"><span class="ui-icon ui-icon-plusthick" aria-hidden="true"></span></button>')
+			.attr({title: fm.i18n('cmdfullscreen'), 'aria-label': fm.i18n('cmdfullscreen'), 'aria-pressed': 'false'})
+			.on('click', function(e) {
 				if (navmove) {
 					return;
 				}
@@ -271,7 +270,8 @@
 						}
 					});
 				}
-				$(this).toggleClass(navicon+'-fullscreen-off');
+				$(this).toggleClass(navicon+'-fullscreen-off').attr('aria-pressed', String(!full))
+					.children('.ui-icon').toggleClass('ui-icon-plusthick', full).toggleClass('ui-icon-arrowreturnthick-1-s', !full);
 				var collection = win;
 				if (parent.is('.ui-resizable')) {
 					collection = collection.add(parent);
@@ -335,20 +335,19 @@
 			cover.hide();
 		},
 			
-		prev = $('<div class="'+navicon+' '+navicon+'-prev"></div>').on('click touchstart', function(e) { ! navmove && navtrigger(leftKey); return false; }),
-		next = $('<div class="'+navicon+' '+navicon+'-next"></div>').on('click touchstart', function(e) { ! navmove && navtrigger(rightKey); return false; }),
+		prev = $('<div class="'+navicon+' '+navicon+'-prev"></div>').on('click touchstart', function(e) { ! navmove && ! $(this).hasClass('ui-state-disabled') && navtrigger(leftKey); return false; }),
+		next = $('<div class="'+navicon+' '+navicon+'-next"></div>').on('click touchstart', function(e) { ! navmove && ! $(this).hasClass('ui-state-disabled') && navtrigger(rightKey); return false; }),
 		navbar  = $('<div class="elfinder-quicklook-navbar"></div>')
 			.append(prev)
-			.append(fsicon)
 			.append(next)
-			.append('<div class="elfinder-quicklook-navbar-separator"></div>')
-			.append($('<div class="'+navicon+' '+navicon+'-close"></div>').on('click touchstart', function(e) { ! navmove && self.window.trigger('close'); return false; }))
 		,
-		titleClose = $('<span class="ui-front ui-icon elfinder-icon-close ui-icon-closethick"></span>').on('mousedown', function(e) {
-			e.stopPropagation();
-			self.window.trigger('close');
-		}),
-		titleDock = $('<span class="ui-front ui-icon elfinder-icon-minimize ui-icon-minusthick"></span>').on('mousedown', function(e) {
+		titleClose = $('<button type="button" class="ui-widget-header ui-dialog-titlebar-close ui-corner-all elfinder-titlebar-button"><span class="ui-icon elfinder-icon-close ui-icon-closethick" aria-hidden="true"></span></button>')
+			.attr({title: fm.i18n('btnClose'), 'aria-label': fm.i18n('btnClose')})
+			.on('click', function(e) {
+				e.stopPropagation();
+				self.window.trigger('close');
+			}),
+		titleDock = $('<span class="ui-front ui-icon elfinder-icon-minimize ui-icon-minusthick elfinder-titlebar-minimize"></span>').on('mousedown', function(e) {
 			e.stopPropagation();
 			if (! self.docked()) {
 				self.window.trigger('navdockin');
@@ -404,14 +403,10 @@
 					self.preview.off('changesize').trigger('change').children().remove();
 					title.html(name);
 					
-					prev.css('visibility', '');
-					next.css('visibility', '');
-					if (file.hash === fm.cwdId2Hash(cwd.find('[id]:not(.elfinder-cwd-parent):first').attr('id'))) {
-						prev.css('visibility', 'hidden');
-					}
-					if (file.hash === fm.cwdId2Hash(cwd.find('[id]:last').attr('id'))) {
-						next.css('visibility', 'hidden');
-					}
+					prev.toggleClass('ui-state-disabled', file.hash === fm.cwdId2Hash(cwd.find('[id]:not(.elfinder-cwd-parent):first').attr('id')));
+					next.toggleClass('ui-state-disabled', file.hash === fm.cwdId2Hash(cwd.find('[id]:last').attr('id')));
+					prev.attr('aria-disabled', String(prev.hasClass('ui-state-disabled')));
+					next.attr('aria-disabled', String(next.hasClass('ui-state-disabled')));
 					
 					if (file.mime === 'directory') {
 						getSizeHashes = [ file.hash ];
@@ -493,12 +488,13 @@
 		})
 		.append(
 			$('<div class="ui-dialog-titlebar ui-widget-header ui-corner-top ui-helper-clearfix elfinder-quicklook-titlebar"></div>')
-			.append(
-				$('<span class="ui-widget-header ui-dialog-titlebar-close ui-corner-all elfinder-titlebar-button elfinder-quicklook-titlebar-icon'+(platformWin? ' elfinder-titlebar-button-right' : '')+'"></span>').append(
-					titleClose, titleDock
-				),
-				title
-			),
+			.on('keydown keypress', 'button', function(e) {
+				// Let the focused button handle activation instead of the file shortcuts.
+				if (e.keyCode === $.ui.keyCode.ENTER || e.keyCode === $.ui.keyCode.SPACE) {
+					e.stopPropagation();
+				}
+			})
+			.append(title, fsicon, titleClose, titleDock),
 			this.preview,
 			self.info.hide(),
 			cover.hide(),

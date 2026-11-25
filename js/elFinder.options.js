@@ -920,6 +920,8 @@ elFinder.prototype._options = {
 
 			// icons view setting
 			iconsView : {
+				// Keep the extension visible when an icon caption is truncated.
+				preserveExtension: false,
 				// default icon size (0-3 in default CSS (cwd.css - elfinder-cwd-size[number]))
 				size: 0,
 				// number of maximum size (3 in default CSS (cwd.css - elfinder-cwd-size[number]))
@@ -968,6 +970,8 @@ elFinder.prototype._options = {
 			//}
 		},
 		path : {
+			// Keep breadcrumbs above the work zone, including when the navbar is visible.
+			toWorkzone : false,
 			// Move to head of work zone without UI navbar
 			toWorkzoneWithoutNavbar : true
 		},
